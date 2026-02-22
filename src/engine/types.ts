@@ -33,9 +33,14 @@ export interface PlayerPuzzle {
 }
 
 export interface GenerateOptions {
-  readonly size?: number;        // default 13
-  readonly seed?: string;        // for reproducibility
-  readonly maxAttempts?: number;  // how many patterns to try
+  readonly size?: number;            // default 13
+  readonly seed?: string;            // for reproducibility
+  readonly maxAttempts?: number;     // outer generation retry budget (default 50)
+  readonly minDensity?: number;      // min black cell ratio (default 0.18)
+  readonly maxDensity?: number;      // max black cell ratio (default 0.28)
+  readonly minSpan?: number;         // minimum word length (default 3)
+  readonly maxCandidates?: number;   // backtracker branching limit (default 50)
+  readonly patternAttempts?: number; // inner pattern retry budget (default 20)
 }
 
 /** Black cell marker in the grid */

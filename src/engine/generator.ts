@@ -21,8 +21,12 @@ export function generatePuzzle(wordList: WordList, options?: GenerateOptions): P
 
   for (let attempt = 0; attempt < maxAttempts; attempt++) {
     try {
-      const pattern = generatePattern(size, 20);
-      const filled = fillGrid(pattern, wordList);
+      const pattern = generatePattern(size, options?.patternAttempts ?? 20, {
+        minDensity: options?.minDensity,
+        maxDensity: options?.maxDensity,
+        minSpan: options?.minSpan,
+      });
+      const filled = fillGrid(pattern, wordList, options?.maxCandidates);
       if (!filled) continue;
 
       const entries = getEntries(filled);

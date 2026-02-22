@@ -145,11 +145,12 @@ function shuffle<T>(arr: readonly T[]): T[] {
  */
 export function generatePattern(
   size: number,
-  maxAttempts: number = 100
+  maxAttempts: number = 100,
+  options?: { minDensity?: number; maxDensity?: number; minSpan?: number },
 ): string[][] {
   const totalCells = size * size;
-  const minBlack = Math.floor(totalCells * 0.18);
-  const maxBlack = Math.floor(totalCells * 0.28);
+  const minBlack = Math.floor(totalCells * (options?.minDensity ?? 0.18));
+  const maxBlack = Math.floor(totalCells * (options?.maxDensity ?? 0.28));
 
   // Build candidate positions: only one cell per symmetric pair.
   // For a cell (r, c) and its mirror (size-1-r, size-1-c), we pick the
@@ -193,7 +194,7 @@ export function generatePattern(
       placeBlackPair(grid, r, c);
 
       // Check constraints: connectivity and minimum spans
-      if (isConnected(grid) && allSpansValid(grid, 3)) {
+      if (isConnected(grid) && allSpansValid(grid, options?.minSpan ?? 3)) {
         blackCount += pairSize;
       } else {
         // Revert

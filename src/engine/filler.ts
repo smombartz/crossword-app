@@ -115,23 +115,24 @@ export function placeWord(
   }
 }
 
-/** Maximum number of word candidates to try per slot to avoid combinatorial explosion. */
-const MAX_CANDIDATES_PER_SLOT = 50;
+/** Default maximum number of word candidates to try per slot to avoid combinatorial explosion. */
+const DEFAULT_MAX_CANDIDATES = 50;
 
 /**
  * Get viable candidates for a slot given the current grid state and used words.
- * Returns at most MAX_CANDIDATES_PER_SLOT entries.
+ * Returns at most maxCandidates entries.
  */
 function getCandidates(
   grid: readonly (readonly string[])[],
   slot: Slot,
   wordList: WordList,
   usedWords: ReadonlySet<string>,
+  maxCandidates: number,
 ): readonly WordEntry[] {
   const constraints = getConstraints(grid, slot);
   const all = wordList.wordsMatchingPattern(slot.length, constraints);
   const viable: WordEntry[] = [];
-  for (let i = 0; i < all.length && viable.length < MAX_CANDIDATES_PER_SLOT; i++) {
+  for (let i = 0; i < all.length && viable.length < maxCandidates; i++) {
     if (!usedWords.has(all[i].word)) {
       viable.push(all[i]);
     }
@@ -153,6 +154,7 @@ function getCandidates(
 export function fillGrid(
   pattern: readonly (readonly string[])[],
   wordList: WordList,
+  maxCandidates: number = DEFAULT_MAX_CANDIDATES,
 ): string[][] | null {
   const rows = pattern.length;
   if (rows === 0) return null;
@@ -190,7 +192,7 @@ export function fillGrid(
 
     for (let i = 0; i < allSlots.length; i++) {
       if (filled.has(i)) continue;
-      const candidates = getCandidates(grid, allSlots[i], wordList, usedWords);
+      const candidates = getCandidates(grid, allSlots[i], wordList, usedWords, maxCandidates);
       if (candidates.length === 0) {
         return false; // Dead end: an unfilled slot has no viable candidates
       }
