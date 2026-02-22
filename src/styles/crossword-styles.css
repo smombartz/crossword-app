@@ -304,6 +304,9 @@ input[type="password"] {
 /* Grid — 7x7 smaller variant */
 .grid-cell.sm { width: 38px; height: 38px; font-size: 1rem; }
 
+/* Player view — slightly larger cells for solving comfort */
+.grid-cell.player { width: 56px; height: 56px; }
+
 /* ============================================================
    Clue List
    ============================================================ */
@@ -390,6 +393,7 @@ input[type="password"] {
 
   /* Grid — smaller cells */
   .grid-cell { width: 42px !important; height: 42px !important; font-size: 1.1rem; }
+  .grid-cell.player { width: 40px !important; height: 40px !important; }
   .grid-cell .cell-number { font-size: 0.48rem; }
   .grid-cell input { font-size: 1.1rem; }
 
