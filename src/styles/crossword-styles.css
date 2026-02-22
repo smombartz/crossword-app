@@ -1,0 +1,403 @@
+/* ============================================================
+   Crossword Design System
+   Extracted from Crossword Generator / Player
+   ============================================================ */
+
+/* Fonts (Google Fonts)
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Libre+Franklin:wght@400;500;600;700&display=swap" rel="stylesheet">
+*/
+
+/* ============================================================
+   Reset & Base
+   ============================================================ */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Libre Franklin', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #fff;
+  color: #121212;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* ============================================================
+   Typography
+   ============================================================ */
+
+/* Display / Headings — serif */
+h1, h2, .heading-display {
+  font-family: 'Libre Baskerville', Georgia, 'Times New Roman', serif;
+  font-weight: 700;
+}
+
+h1 { font-size: 1.6rem; }
+h2 { font-size: 1.1rem; }
+
+/* Section headings — sans, uppercase */
+h3, .heading-section {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #5a5a5a;
+  font-weight: 600;
+}
+
+/* Sub-section headings */
+h4, .heading-subsection {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #5a5a5a;
+  margin-bottom: 8px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 4px;
+}
+
+/* Body text */
+.text-body { font-size: 0.85rem; }
+.text-small { font-size: 0.8rem; }
+.text-xs { font-size: 0.72rem; }
+.text-muted { color: #5a5a5a; }
+.text-hint { font-size: 0.72rem; color: #888; }
+.text-mono { font-family: monospace; }
+
+/* ============================================================
+   Colors
+   ============================================================ */
+/*
+  --color-text:           #121212    (near-black, primary text)
+  --color-text-secondary: #5a5a5a    (muted labels, subtitles)
+  --color-text-hint:      #888       (hints, tertiary info)
+
+  --color-accent:         #326891    (blue — export, active states)
+  --color-accent-hover:   #255473    (blue — darker hover)
+
+  --color-link:           #478fc5    (links)
+  --color-link-visited:   #4e98d0
+  --color-link-hover:     #255980
+
+  --color-success:        #1a7a2e    (green — done/success)
+  --color-error:          #cc0000    (red — errors)
+  --color-highlight:      #ffda00    (yellow — active cell/selection)
+  --color-highlight-soft: #a7d8ff    (light blue — highlighted range)
+
+  --color-border:         #e2e2e2    (card/tab borders)
+  --color-border-light:   #eee       (dividers)
+  --color-border-input:   #ccc       (input borders)
+  --color-border-strong:  #121212    (grid borders)
+
+  --color-bg:             #fff       (background)
+  --color-bg-subtle:      #f7f7f7    (status bar background)
+  --color-bg-hover:       #f0f0f0    (button hover)
+  --color-bg-disabled:    #ccc       (disabled buttons)
+*/
+
+/* ============================================================
+   Links
+   ============================================================ */
+a:link { color: #478fc5; text-decoration: none; }
+a:visited { color: #4e98d0; }
+a:hover { color: #255980; text-decoration: underline; }
+a:active { color: #255980; }
+
+/* ============================================================
+   Buttons
+   ============================================================ */
+.btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+}
+.btn:active { transform: scale(0.97); }
+
+.btn-primary { background: #121212; color: #fff; }
+.btn-primary:hover { background: #333; }
+.btn-primary:disabled { background: #ccc; color: #888; cursor: not-allowed; }
+
+.btn-secondary { background: #fff; color: #121212; border: 1px solid #121212; }
+.btn-secondary:hover { background: #f0f0f0; }
+
+.btn-export { background: #326891; color: #fff; }
+.btn-export:hover { background: #255473; }
+.btn-export:disabled { background: #ccc; color: #888; cursor: not-allowed; }
+
+.btn-row { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+
+/* Button group (segmented control) */
+.btn-group { display: inline-flex; border-radius: 4px; overflow: hidden; }
+.btn-group-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #5a5a5a;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+.btn-group .btn { border-radius: 0; padding: 8px 16px; font-size: 0.8rem; }
+.btn-group .btn:last-child { border-left: 1px solid #fff; }
+
+/* ============================================================
+   Form Controls
+   ============================================================ */
+.form-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+.form-row label {
+  font-weight: 600;
+  font-size: 0.85rem;
+  min-width: 100px;
+}
+.form-row input {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  width: 160px;
+}
+.form-row input.wide-input { width: 300px; }
+
+input[type="password"] {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-family: monospace;
+}
+
+/* ============================================================
+   Tabs
+   ============================================================ */
+.tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid #e2e2e2;
+  margin-bottom: 0;
+}
+.tab {
+  padding: 10px 18px;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  border-radius: 0;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #5a5a5a;
+  transition: color 0.15s, border-color 0.15s;
+  margin-bottom: -2px;
+}
+.tab:hover { color: #121212; }
+.tab.active {
+  color: #121212;
+  border-bottom-color: #121212;
+  font-weight: 700;
+}
+
+/* ============================================================
+   Cards & Panels
+   ============================================================ */
+.card {
+  border: 1px solid #e2e2e2;
+  border-radius: 8px;
+  padding: 24px 28px;
+}
+
+.panel {
+  background: #fff;
+  border: 1px solid #e2e2e2;
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+  padding: 24px;
+}
+
+/* Settings-style row layout (label + input side-by-side) */
+.settings-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 24px 0;
+  flex-wrap: wrap;
+}
+.settings-row + .settings-row { border-top: 1px solid #eee; }
+.setting-label { font-weight: 600; font-size: 0.85rem; min-width: 120px; }
+.setting-hint { font-size: 0.72rem; color: #888; margin-top: 4px; }
+.setting-input { flex: 1; max-width: 340px; }
+
+/* ============================================================
+   Status Messages
+   ============================================================ */
+.status {
+  margin-top: 12px;
+  padding: 10px 14px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  display: none;
+}
+.status.info { display: block; background: #f7f7f7; color: #326891; border: 1px solid #e2e2e2; }
+.status.success { display: block; background: #f7f7f7; color: #1a7a2e; border: 1px solid #e2e2e2; }
+.status.error { display: block; background: #f7f7f7; color: #cc0000; border: 1px solid #e2e2e2; }
+
+/* Inline status indicators */
+.status-done { color: #1a7a2e; }
+.status-active { color: #326891; font-weight: 600; }
+.status-pending { color: #999; }
+.status-error { color: #cc0000; }
+.status-text { font-size: 0.8rem; color: #888; margin-top: 4px; }
+.countdown { font-variant-numeric: tabular-nums; }
+
+/* ============================================================
+   Crossword Grid
+   ============================================================ */
+.grid-container { display: inline-block; border: 2px solid #121212; }
+.grid-row { display: flex; }
+.grid-cell {
+  width: 52px;
+  height: 52px;
+  border: 0.5px solid #121212;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  font-weight: 700;
+  position: relative;
+  background: #fff;
+}
+.grid-cell.black { background: #121212; }
+.grid-cell .cell-number {
+  position: absolute;
+  top: 2px;
+  left: 3px;
+  font-size: 0.55rem;
+  font-weight: 600;
+  color: #555;
+}
+
+/* Interactive grid states */
+.grid-cell.highlight { background: #a7d8ff; }
+.grid-cell.active { background: #ffda00; }
+.grid-cell.editable { cursor: pointer; }
+.grid-cell.editable:hover { background: #ffda00; }
+
+.grid-cell input {
+  width: 100%;
+  height: 100%;
+  border: none;
+  text-align: center;
+  font-size: 1.3rem;
+  font-weight: 700;
+  background: transparent;
+  outline: 2px solid #326891;
+  text-transform: uppercase;
+}
+
+/* Grid — 7x7 smaller variant */
+.grid-cell.sm { width: 38px; height: 38px; font-size: 1rem; }
+
+/* ============================================================
+   Clue List
+   ============================================================ */
+.clue-columns { display: flex; gap: 32px; flex-wrap: wrap; }
+.clue-column { flex: 1; min-width: 280px; }
+
+.clue-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 6px;
+}
+.clue-num { font-weight: 700; font-size: 0.85rem; min-width: 28px; }
+.clue-word { font-size: 0.75rem; color: #888; min-width: 50px; font-family: monospace; }
+.clue-row input {
+  flex: 1;
+  padding: 6px 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.85rem;
+}
+
+/* Clickable clue (player) */
+.clue-item {
+  font-size: 0.85rem;
+  padding: 4px 0;
+  cursor: pointer;
+  line-height: 1.3;
+}
+.clue-item:hover { color: #326891; }
+.clue-item.active-clue { color: #326891; font-weight: 600; }
+.clue-item .cn { font-weight: 700; margin-right: 4px; }
+
+/* Solution answer highlight */
+.answer { color: #326891; font-weight: 600; }
+
+/* ============================================================
+   Layout Utilities
+   ============================================================ */
+.container { max-width: 1100px; margin: 0 auto; padding: 20px; }
+.container-narrow { max-width: 500px; margin: 0 auto; }
+.flex-row { display: flex; align-items: center; gap: 16px; }
+.flex-between { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.text-center { text-align: center; }
+
+/* ============================================================
+   Animation
+   ============================================================ */
+@keyframes pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+.celebrate { animation: pop 0.4s ease; }
+
+/* ============================================================
+   Responsive — Mobile (max-width: 640px)
+   ============================================================ */
+@media (max-width: 640px) {
+  body { padding: 12px; }
+
+  h1 { font-size: 1.3rem; }
+
+  .flex-row,
+  .flex-between { flex-direction: column; align-items: flex-start; gap: 12px; }
+
+  /* Tabs — horizontal scroll */
+  .tabs { overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab { padding: 8px 12px; font-size: 0.78rem; flex-shrink: 0; }
+
+  /* Panels */
+  .panel { padding: 16px; }
+  .card { padding: 16px; }
+
+  /* Forms */
+  .form-row { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .form-row label { min-width: unset; }
+  .form-row input { width: 100%; }
+  .form-row input.wide-input { width: 100%; }
+  .form-row select { width: 100%; }
+  .btn-row { flex-direction: column; }
+  .btn-row .btn { width: 100%; }
+
+  /* Grid — smaller cells */
+  .grid-cell { width: 42px !important; height: 42px !important; font-size: 1.1rem; }
+  .grid-cell .cell-number { font-size: 0.48rem; }
+  .grid-cell input { font-size: 1.1rem; }
+
+  /* Clues — single column */
+  .clue-columns { flex-direction: column; gap: 20px; }
+  .clue-column { min-width: unset; }
+
+  /* Settings */
+  .settings-row { flex-direction: column; gap: 10px; }
+  .setting-input { max-width: 100%; }
+}
