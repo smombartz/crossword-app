@@ -264,7 +264,7 @@ When the user says **ctgh**, immediately:
 1. Run `pnpm lint && pnpm typecheck && pnpm test:engine` to verify nothing is broken
 2. Stage all relevant changed files (do NOT use `git add .` — stage specific files)
 3. Write a concise commit message summarizing the completed feature/change
-4. Commit and push to the current branch on GitHub
+4. Commit to the current branch on GitHub
 
 ---
 

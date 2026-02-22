@@ -28,7 +28,7 @@ yarn-error.log*
 .env
 
 # built wordlist (generated from wordlist.db via pnpm build:wordlist)
-/public/wordlist.json
+# /public/wordlist.json
 
 # vercel
 .vercel
