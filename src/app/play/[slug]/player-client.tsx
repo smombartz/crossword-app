@@ -154,6 +154,7 @@ export function PlayerClient({ puzzle }: PlayerClientProps) {
           onCellClick={handleCellClick}
           playerGrid={state.playerGrid}
           onKeyDown={handleKeyDown}
+          gridSize={puzzle.size}
         />
       </div>
 

@@ -48,6 +48,8 @@ interface CrosswordGridProps {
   playerGrid?: readonly (readonly string[])[];
   /** Keyboard event handler for interactive (player) mode. */
   onKeyDown?: (e: React.KeyboardEvent) => void;
+  /** Grid size (e.g. 7 or 13) — used for size-specific styling. */
+  gridSize?: number;
 }
 
 export function CrosswordGrid({
@@ -58,6 +60,7 @@ export function CrosswordGrid({
   onCellClick,
   playerGrid,
   onKeyDown,
+  gridSize,
 }: CrosswordGridProps) {
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -79,7 +82,7 @@ export function CrosswordGrid({
 
   return (
     <div
-      className="grid-container"
+      className={`grid-container${gridSize ? ` grid-size-${gridSize}` : ''}`}
       style={{ position: 'relative' }}
       tabIndex={playerGrid ? 0 : undefined}
       onKeyDown={!playerGrid ? onKeyDown : undefined}

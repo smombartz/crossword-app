@@ -15,13 +15,20 @@ export default function CreatorPage() {
   const [error, setError] = useState<string | null>(null);
   const [shareUrl, setShareUrl] = useState<string | null>(null);
   const [sharing, setSharing] = useState(false);
+  const [gridSize, setGridSize] = useState<7 | 13>(13);
+
+  const handleSizeChange = (size: 7 | 13) => {
+    setGridSize(size);
+    setPuzzle(null);
+    setShareUrl(null);
+  };
 
   const handleGenerate = async () => {
     setGenerating(true);
     setError(null);
     setShareUrl(null);
     try {
-      const result = await generate();
+      const result = await generate({ size: gridSize });
       setPuzzle(result);
     } catch (err) {
       setError((err as Error).message || "Couldn't generate a puzzle. Try again!");
@@ -77,6 +84,24 @@ export default function CreatorPage() {
       )}
 
       <div className="btn-row" style={{ marginBottom: 24 }}>
+        <div className="btn-group">
+          <span className="btn-group-label" style={{ marginRight: 8 }}>Size</span>
+          <button
+            className={`btn ${gridSize === 7 ? 'btn-primary' : 'btn-secondary'}`}
+            onClick={() => handleSizeChange(7)}
+            disabled={generating}
+          >
+            7×7
+          </button>
+          <button
+            className={`btn ${gridSize === 13 ? 'btn-primary' : 'btn-secondary'}`}
+            onClick={() => handleSizeChange(13)}
+            disabled={generating}
+          >
+            13×13
+          </button>
+        </div>
+
         <button
           className="btn btn-primary"
           onClick={handleGenerate}
@@ -110,7 +135,7 @@ export default function CreatorPage() {
       {puzzle && (
         <div style={{ marginTop: 24 }}>
           <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 24 }}>
-            <CrosswordGrid grid={puzzle.grid} entries={puzzle.entries} />
+            <CrosswordGrid grid={puzzle.grid} entries={puzzle.entries} gridSize={puzzle.size} />
           </div>
           <ClueList entries={puzzle.entries} />
         </div>

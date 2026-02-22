@@ -307,6 +307,10 @@ input[type="password"] {
 /* Player view — slightly larger cells for solving comfort */
 .grid-cell.player { width: 56px; height: 56px; }
 
+/* Grid size variants — 7x7 gets larger cells to fill space proportionally */
+.grid-container.grid-size-7 .grid-cell { width: 72px; height: 72px; font-size: 1.6rem; }
+.grid-container.grid-size-7 .grid-cell .cell-number { font-size: 0.65rem; }
+
 /* ============================================================
    Clue List
    ============================================================ */
@@ -396,6 +400,10 @@ input[type="password"] {
   .grid-cell.player { width: 40px !important; height: 40px !important; }
   .grid-cell .cell-number { font-size: 0.48rem; }
   .grid-cell input { font-size: 1.1rem; }
+
+  /* 7x7 — larger cells on mobile since fewer cells (7×48=336px fits 375px screens) */
+  .grid-container.grid-size-7 .grid-cell { width: 48px !important; height: 48px !important; font-size: 1.3rem; }
+  .grid-container.grid-size-7 .grid-cell .cell-number { font-size: 0.52rem; }
 
   /* Clues — single column */
   .clue-columns { flex-direction: column; gap: 20px; }
