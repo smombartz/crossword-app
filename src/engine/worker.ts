@@ -7,16 +7,36 @@ import { generatePuzzle } from './generator';
 import type { WordList } from './wordlist';
 import type { GenerateOptions } from './types';
 
+interface PresetRow {
+  grid_size: number;
+  min_density: number;
+  max_density: number;
+  min_span: number;
+  max_candidates: number;
+  pattern_attempts: number;
+  max_attempts: number;
+}
+
 let wordList: WordList | null = null;
+let presets: Map<number, PresetRow> = new Map();
 
 self.onmessage = async (e: MessageEvent) => {
   const { type, payload } = e.data;
 
   if (type === 'init') {
     try {
-      const response = await fetch('/wordlist.json');
-      const data = await response.json();
+      const [wordlistRes, presetsRes] = await Promise.all([
+        fetch('/wordlist.json'),
+        fetch('/api/presets'),
+      ]);
+      const data = await wordlistRes.json();
       wordList = loadWordList(data);
+
+      if (presetsRes.ok) {
+        const rows: PresetRow[] = await presetsRes.json();
+        presets = new Map(rows.map(r => [r.grid_size, r]));
+      }
+
       self.postMessage({ type: 'ready' });
     } catch (err) {
       self.postMessage({ type: 'error', message: (err as Error).message });
@@ -28,7 +48,22 @@ self.onmessage = async (e: MessageEvent) => {
     try {
       if (!wordList) throw new Error('Word list not loaded');
       const options: GenerateOptions | undefined = payload?.options;
-      const puzzle = generatePuzzle(wordList, options);
+      const size = options?.size ?? 13;
+      const preset = presets.get(size);
+
+      const mergedOptions: GenerateOptions = {
+        ...options,
+        ...(preset && {
+          minDensity: options?.minDensity ?? preset.min_density,
+          maxDensity: options?.maxDensity ?? preset.max_density,
+          minSpan: options?.minSpan ?? preset.min_span,
+          maxCandidates: options?.maxCandidates ?? preset.max_candidates,
+          patternAttempts: options?.patternAttempts ?? preset.pattern_attempts,
+          maxAttempts: options?.maxAttempts ?? preset.max_attempts,
+        }),
+      };
+
+      const puzzle = generatePuzzle(wordList, mergedOptions);
       self.postMessage({ type: 'success', puzzle });
     } catch (err) {
       self.postMessage({ type: 'error', message: (err as Error).message });
