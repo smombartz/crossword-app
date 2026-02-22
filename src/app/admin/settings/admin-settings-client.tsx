@@ -12,13 +12,13 @@ interface Preset {
   max_attempts: number;
 }
 
-const FIELDS: { key: keyof Omit<Preset, 'grid_size'>; label: string; step: string; min: number }[] = [
-  { key: 'min_density', label: 'Min Density', step: '0.01', min: 0 },
-  { key: 'max_density', label: 'Max Density', step: '0.01', min: 0 },
-  { key: 'min_span', label: 'Min Span', step: '1', min: 2 },
-  { key: 'max_candidates', label: 'Max Candidates', step: '1', min: 1 },
-  { key: 'pattern_attempts', label: 'Pattern Attempts', step: '1', min: 1 },
-  { key: 'max_attempts', label: 'Max Attempts', step: '1', min: 1 },
+const FIELDS: { key: keyof Omit<Preset, 'grid_size'>; label: string; hint: string; step: string; min: number }[] = [
+  { key: 'min_density', label: 'Min Density', hint: 'Floor for black cell ratio. Lower = more open grids with longer words. Default 0.18 (18%).', step: '0.01', min: 0 },
+  { key: 'max_density', label: 'Max Density', hint: 'Ceiling for black cell ratio. Higher = allows denser grids with more word boundaries. Default 0.28 (28%).', step: '0.01', min: 0 },
+  { key: 'min_span', label: 'Min Span', hint: 'Shortest allowed word length. Every white cell must belong to a run this long in both directions. Default 3.', step: '1', min: 2 },
+  { key: 'max_candidates', label: 'Max Candidates', hint: 'Words the backtracker tries per slot. Higher = better fill quality but slower. Lower = faster but more failures. Default 50.', step: '1', min: 1 },
+  { key: 'pattern_attempts', label: 'Pattern Attempts', hint: 'How many grid layouts to try per generation cycle before giving up. Default 20.', step: '1', min: 1 },
+  { key: 'max_attempts', label: 'Max Attempts', hint: 'Total generation cycles (pattern + fill) before reporting failure to the user. Default 50.', step: '1', min: 1 },
 ];
 
 export function AdminSettingsClient() {
@@ -78,10 +78,11 @@ export function AdminSettingsClient() {
         <div key={preset.grid_size} className="card" style={{ marginTop: 16 }}>
           <h2>{preset.grid_size}&times;{preset.grid_size}</h2>
           <div style={{ marginTop: 16 }}>
-            {FIELDS.map(({ key, label, step, min }) => (
+            {FIELDS.map(({ key, label, hint, step, min }) => (
               <div key={key} className="settings-row">
                 <div>
                   <div className="setting-label">{label}</div>
+                  <div className="setting-hint">{hint}</div>
                 </div>
                 <div className="setting-input">
                   <input
