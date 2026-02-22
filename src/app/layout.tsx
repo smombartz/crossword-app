@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Libre_Baskerville, Libre_Franklin } from 'next/font/google';
+import { Header } from '@/components/ui/header';
 import '@/styles/crossword-styles.css';
 
 const libreBaskerville = Libre_Baskerville({
@@ -29,7 +30,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${libreBaskerville.variable} ${libreFranklin.variable}`}>
-      <body>{children}</body>
+      <body>
+        <div className="container">
+          <Header />
+          {children}
+        </div>
+      </body>
     </html>
   );
 }
