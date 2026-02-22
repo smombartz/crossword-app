@@ -129,23 +129,26 @@ function shuffle<T>(arr: readonly T[]): T[] {
   return result;
 }
 
+const DEFAULT_PATTERN_ATTEMPTS = 20;
+
 /**
  * Generates a valid crossword grid pattern of the given size.
  *
  * The pattern has:
  * - 180-degree rotational symmetry
  * - All white cells connected
- * - Every white cell has horizontal AND vertical span >= 3
- * - Black cell density between ~18-28%
+ * - Every white cell has horizontal AND vertical span >= minSpan (default 3)
+ * - Black cell density between minDensity and maxDensity (defaults 18-28%)
  *
  * @param size - Grid dimension (e.g. 13 for a 13x13 grid)
- * @param maxAttempts - Maximum number of full retries (default 100)
+ * @param maxAttempts - Maximum number of full retries (default 20)
+ * @param options - Optional density and span overrides
  * @returns A 2D string array where cells are either BLACK or '' (white)
  * @throws Error if no valid pattern found within maxAttempts
  */
 export function generatePattern(
   size: number,
-  maxAttempts: number = 100,
+  maxAttempts: number = DEFAULT_PATTERN_ATTEMPTS,
   options?: { minDensity?: number; maxDensity?: number; minSpan?: number },
 ): string[][] {
   const totalCells = size * size;

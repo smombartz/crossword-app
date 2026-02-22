@@ -11,7 +11,7 @@ import { getEntries } from './numbering';
  * Retries up to maxAttempts times if pattern generation or fill fails.
  *
  * @param wordList - Word list to draw words and clues from
- * @param options - Optional generation parameters (size, maxAttempts)
+ * @param options - Generation parameters (see GenerateOptions in types.ts)
  * @returns A complete Puzzle with grid, entries, and clues
  * @throws Error if no valid puzzle could be generated within maxAttempts
  */
