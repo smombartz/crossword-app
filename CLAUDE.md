@@ -255,6 +255,17 @@ pnpm lint && pnpm typecheck && pnpm test:engine
 
 All three must pass. Don't skip the typecheck — TypeScript strict mode catches real bugs.
 
+## Shortcuts
+
+### `ctgh` — Commit to GitHub
+
+When the user says **ctgh**, immediately:
+
+1. Run `pnpm lint && pnpm typecheck && pnpm test:engine` to verify nothing is broken
+2. Stage all relevant changed files (do NOT use `git add .` — stage specific files)
+3. Write a concise commit message summarizing the completed feature/change
+4. Commit and push to the current branch on GitHub
+
 ---
 
 ## Common Patterns
