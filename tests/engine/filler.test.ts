@@ -97,4 +97,50 @@ describe('fillGrid', () => {
       expect(unique.size).toBe(words.length);
     }
   });
+
+  it('places custom words in the grid', () => {
+    const wl = loadWordList(testData);
+    const pattern = [
+      ['', '', ''],
+      ['', '', ''],
+      ['', '', ''],
+    ];
+    const result = fillGrid(pattern, wl, 50, ['ACE']);
+    expect(result).not.toBeNull();
+    if (result) {
+      const words: string[] = [];
+      for (let r = 0; r < 3; r++) words.push(result[r].join(''));
+      for (let c = 0; c < 3; c++) words.push(result.map(row => row[c]).join(''));
+      expect(words).toContain('ACE');
+    }
+  });
+
+  it('returns null when custom word cannot fit', () => {
+    const wl = loadWordList(testData);
+    const pattern = [
+      ['', '', ''],
+      ['', '', ''],
+      ['', '', ''],
+    ];
+    const result = fillGrid(pattern, wl, 50, ['CATCH']);
+    expect(result).toBeNull();
+  });
+
+  it('places multiple custom words without conflicts', () => {
+    const wl = loadWordList(testData);
+    const pattern = [
+      ['', '', ''],
+      ['', '', ''],
+      ['', '', ''],
+    ];
+    const result = fillGrid(pattern, wl, 50, ['ACE', 'DRY']);
+    expect(result).not.toBeNull();
+    if (result) {
+      const words: string[] = [];
+      for (let r = 0; r < 3; r++) words.push(result[r].join(''));
+      for (let c = 0; c < 3; c++) words.push(result.map(row => row[c]).join(''));
+      expect(words).toContain('ACE');
+      expect(words).toContain('DRY');
+    }
+  });
 });

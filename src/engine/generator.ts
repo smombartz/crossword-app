@@ -26,7 +26,7 @@ export function generatePuzzle(wordList: WordList, options?: GenerateOptions): P
         maxDensity: options?.maxDensity,
         minSpan: options?.minSpan,
       });
-      const filled = fillGrid(pattern, wordList, options?.maxCandidates);
+      const filled = fillGrid(pattern, wordList, options?.maxCandidates, options?.customWords);
       if (!filled) continue;
 
       const entries = getEntries(filled);

@@ -155,6 +155,7 @@ export function fillGrid(
   pattern: readonly (readonly string[])[],
   wordList: WordList,
   maxCandidates: number = DEFAULT_MAX_CANDIDATES,
+  customWords?: readonly string[],
 ): string[][] | null {
   const rows = pattern.length;
   if (rows === 0) return null;
@@ -175,6 +176,36 @@ export function fillGrid(
   // Track which slots have been filled and which words are used
   const filled = new Set<number>(); // indices into allSlots
   const usedWords = new Set<string>();
+
+  // Seed custom words into compatible slots before backtracking.
+  // Sort custom words longest-first so the most constrained words get placed
+  // first, reducing the chance of conflicts between custom words.
+  if (customWords && customWords.length > 0) {
+    const sorted = [...customWords].sort((a, b) => b.length - a.length);
+
+    for (const word of sorted) {
+      let placed = false;
+      for (let idx = 0; idx < allSlots.length; idx++) {
+        if (filled.has(idx)) continue;
+        const slot = allSlots[idx];
+        if (slot.length !== word.length) continue;
+
+        // Check letter constraints — does this word fit with already-placed letters?
+        const constraints = getConstraints(grid, slot);
+        const fits = Array.from(constraints.entries()).every(
+          ([pos, letter]) => word[pos] === letter,
+        );
+        if (!fits) continue;
+
+        placeWord(grid, slot, word);
+        usedWords.add(word);
+        filled.add(idx);
+        placed = true;
+        break;
+      }
+      if (!placed) return null; // Custom word couldn't fit — caller should retry
+    }
+  }
 
   /**
    * Recursive backtracking solver using MRV heuristic.
