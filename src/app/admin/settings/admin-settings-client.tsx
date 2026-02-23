@@ -28,7 +28,7 @@ export function AdminSettingsClient() {
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   useEffect(() => {
-    fetch('/api/presets')
+    fetch('/api/presets', { cache: 'no-store' })
       .then(res => res.json())
       .then((data: Preset[]) => {
         setPresets(data.sort((a, b) => a.grid_size - b.grid_size));
@@ -58,6 +58,14 @@ export function AdminSettingsClient() {
         body: JSON.stringify(preset),
       });
       if (!res.ok) throw new Error('Save failed');
+
+      // Re-fetch to confirm persistence and sync local state with DB
+      const freshRes = await fetch('/api/presets', { cache: 'no-store' });
+      if (freshRes.ok) {
+        const freshData: Preset[] = await freshRes.json();
+        setPresets(freshData.sort((a, b) => a.grid_size - b.grid_size));
+      }
+
       setMessage({ type: 'success', text: `Saved ${preset.grid_size}\u00d7${preset.grid_size} preset` });
     } catch {
       setMessage({ type: 'error', text: `Failed to save ${preset.grid_size}\u00d7${preset.grid_size} preset` });

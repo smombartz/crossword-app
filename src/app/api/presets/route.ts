@@ -1,5 +1,7 @@
 import { getSupabaseServer } from '@/lib/db';
 
+export const dynamic = 'force-dynamic';
+
 export interface PresetRow {
   grid_size: number;
   min_density: number;
@@ -20,5 +22,10 @@ export async function GET() {
     return Response.json({ error: 'Failed to load presets' }, { status: 500 });
   }
 
-  return Response.json(data as PresetRow[]);
+  return new Response(JSON.stringify(data as PresetRow[]), {
+    headers: {
+      'Content-Type': 'application/json',
+      'Cache-Control': 'no-store',
+    },
+  });
 }
