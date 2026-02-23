@@ -126,6 +126,8 @@ a:active { color: #255980; }
 .btn-export:hover { background: #255473; }
 .btn-export:disabled { background: #ccc; color: #888; cursor: not-allowed; }
 
+.btn-sm { padding: 5px 12px; font-size: 0.78rem; }
+
 .btn-row { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
 
 /* Button group (segmented control) */
@@ -391,6 +393,9 @@ input[type="password"] {
 .flex-between { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
 .text-center { text-align: center; }
 
+/* Header */
+.header-actions { display: flex; align-items: center; gap: 10px; }
+
 /* ============================================================
    Animation
    ============================================================ */
@@ -411,6 +416,11 @@ input[type="password"] {
 
   .flex-row,
   .flex-between { flex-direction: column; align-items: flex-start; gap: 12px; }
+
+  /* Keep header horizontal on mobile */
+  header.flex-between { flex-direction: row; align-items: center; gap: 10px; }
+  .header-actions { gap: 8px; }
+  .header-actions .text-small { max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
   /* Tabs — horizontal scroll */
   .tabs { overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
