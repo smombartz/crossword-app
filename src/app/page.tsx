@@ -1,11 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useSession, signIn } from 'next-auth/react';
 import { usePuzzleGenerator } from '@/hooks/use-puzzle-generator';
 import { CrosswordGrid } from '@/components/grid/crossword-grid';
 import { ClueList } from '@/components/clues/clue-list';
-import type { Puzzle } from '@/engine/types';
+import type { Puzzle, Direction } from '@/engine/types';
 
 export default function CreatorPage() {
   const { generate, ready, error: workerError } = usePuzzleGenerator();
@@ -74,6 +74,18 @@ export default function CreatorPage() {
     }
   };
 
+  const handleClueEdit = useCallback((number: number, direction: Direction, newClue: string) => {
+    setPuzzle(prev => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        entries: prev.entries.map(e =>
+          e.number === number && e.direction === direction ? { ...e, clue: newClue } : e
+        ),
+      };
+    });
+  }, []);
+
   return (
     <div>
       {!ready && (
@@ -137,7 +149,7 @@ export default function CreatorPage() {
           <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 24 }}>
             <CrosswordGrid grid={puzzle.grid} entries={puzzle.entries} gridSize={puzzle.size} />
           </div>
-          <ClueList entries={puzzle.entries} />
+          <ClueList entries={puzzle.entries} editable onClueEdit={handleClueEdit} />
         </div>
       )}
     </div>
