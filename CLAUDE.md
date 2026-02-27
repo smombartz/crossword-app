@@ -8,6 +8,17 @@ A shareable crossword puzzle web app. Users generate 13×13 crossword puzzles cl
 
 ---
 
+## Workflow: Planning & Documentation
+
+1. **After brainstorming** - Save the plan to `docs/plans/YYYY-MM-DD-feature-name.md`
+2. **After completing a plan** - Update the plan file (mark as "Implemented"), move it to `docs/plans/completed/`, and update this CLAUDE.md if the feature adds new environment variables, services, or patterns
+3. **After completing a feature or build** - Append to `docs/log.md` with a heading of `## YYYY-MM-DD HH:MM — Feature Title` followed by a bullet list of changes, features, fixes, etc.
+
+Plans location: `docs/plans/` (completed plans in `docs/plans/completed/`)
+Change log: `docs/log.md`
+
+---
+
 ## Tech Stack
 
 - **Framework:** Next.js 14+ (App Router)

@@ -1,12 +1,13 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import type { Direction } from '@/engine/types';
 
 interface ClueEntry {
   number: number;
   direction: Direction;
   clue: string;
+  answer?: string;
 }
 
 interface ClueListProps {
@@ -18,32 +19,18 @@ interface ClueListProps {
   onClueEdit?: (number: number, direction: Direction, newClue: string) => void;
 }
 
-function EditableClueItem({
+function CreatorClueRow({
   entry,
-  isActive,
-  onClueClick,
   onClueEdit,
 }: {
   entry: ClueEntry;
-  isActive: boolean;
-  onClueClick?: (entry: ClueEntry) => void;
   onClueEdit?: (number: number, direction: Direction, newClue: string) => void;
 }) {
-  const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(entry.clue);
-  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     setDraft(entry.clue);
-    setEditing(false);
   }, [entry.clue]);
-
-  useEffect(() => {
-    if (editing) {
-      inputRef.current?.focus();
-      inputRef.current?.select();
-    }
-  }, [editing]);
 
   const commit = () => {
     const trimmed = draft.trim();
@@ -52,50 +39,18 @@ function EditableClueItem({
     } else {
       setDraft(entry.clue);
     }
-    setEditing(false);
   };
-
-  const cancel = () => {
-    setDraft(entry.clue);
-    setEditing(false);
-  };
-
-  if (editing) {
-    return (
-      <div className={`clue-item${isActive ? ' active-clue' : ''} clue-item-editable`}>
-        <span className="cn">{entry.number}</span>
-        <input
-          ref={inputRef}
-          className="clue-edit-input"
-          value={draft}
-          onChange={e => setDraft(e.target.value)}
-          onKeyDown={e => {
-            if (e.key === 'Enter') commit();
-            if (e.key === 'Escape') cancel();
-          }}
-          onBlur={commit}
-        />
-      </div>
-    );
-  }
 
   return (
-    <div
-      className={`clue-item${isActive ? ' active-clue' : ''} clue-item-editable`}
-      onClick={() => onClueClick?.(entry)}
-    >
-      <span className="cn">{entry.number}</span>
-      <span style={{ flex: 1 }}>{entry.clue}</span>
-      <span
-        className="clue-edit-icon"
-        onClick={e => {
-          e.stopPropagation();
-          setEditing(true);
-        }}
-        title="Edit clue"
-      >
-        &#9998;
-      </span>
+    <div className="clue-row">
+      <span className="clue-num">{entry.number}.</span>
+      {entry.answer && <span className="clue-word">{entry.answer}</span>}
+      <input
+        value={draft}
+        onChange={e => setDraft(e.target.value)}
+        onKeyDown={e => { if (e.key === 'Enter') commit(); }}
+        onBlur={commit}
+      />
     </div>
   );
 }
@@ -104,21 +59,28 @@ export function ClueList({ entries, activeNumber, activeDirection, onClueClick, 
   const across = entries.filter(e => e.direction === 'across');
   const down = entries.filter(e => e.direction === 'down');
 
+  if (editable) {
+    return (
+      <div className="clue-creator">
+        <div className="clue-section">
+          <h4>Across</h4>
+          {across.map(entry => (
+            <CreatorClueRow key={`${entry.number}a`} entry={entry} onClueEdit={onClueEdit} />
+          ))}
+        </div>
+        <div className="clue-section">
+          <h4>Down</h4>
+          {down.map(entry => (
+            <CreatorClueRow key={`${entry.number}d`} entry={entry} onClueEdit={onClueEdit} />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  // Player (read-only) layout — two columns
   const renderItem = (entry: ClueEntry, keySuffix: string) => {
     const isActive = activeNumber === entry.number && activeDirection === entry.direction;
-
-    if (editable) {
-      return (
-        <EditableClueItem
-          key={`${entry.number}${keySuffix}`}
-          entry={entry}
-          isActive={isActive}
-          onClueClick={onClueClick}
-          onClueEdit={onClueEdit}
-        />
-      );
-    }
-
     return (
       <div
         key={`${entry.number}${keySuffix}`}

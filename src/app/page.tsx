@@ -16,8 +16,8 @@ export default function CreatorPage() {
   const [shareUrl, setShareUrl] = useState<string | null>(null);
   const [sharing, setSharing] = useState(false);
   const [gridSize, setGridSize] = useState<5 | 7 | 13>(5);
-  const [customWords, setCustomWords] = useState<string[]>(['', '', '', '']);
-  const [wordErrors, setWordErrors] = useState<(string | null)[]>([null, null, null, null]);
+  const [customWords, setCustomWords] = useState<string[]>(['', '', '']);
+  const [wordErrors, setWordErrors] = useState<(string | null)[]>([null, null, null]);
 
   const handleSizeChange = (size: 5 | 7 | 13) => {
     setGridSize(size);
@@ -144,18 +144,30 @@ export default function CreatorPage() {
     });
   }, []);
 
-  return (
-    <div>
-      {!ready && (
-        <div className="status info">Loading word list...</div>
-      )}
-      {workerError && (
-        <div className="status error">{workerError}</div>
-      )}
+  // Derive inline status message
+  let statusMessage: string | null = null;
+  let statusType: 'success' | 'error' | 'info' = 'info';
+  if (workerError) {
+    statusMessage = workerError;
+    statusType = 'error';
+  } else if (error) {
+    statusMessage = error;
+    statusType = 'error';
+  } else if (shareUrl) {
+    statusMessage = shareUrl;
+    statusType = 'success';
+  } else if (puzzle && !generating) {
+    statusMessage = 'Crossword generated! Edit words/clues below, or generate AI clues.';
+    statusType = 'success';
+  } else if (!ready) {
+    statusMessage = 'Loading word list...';
+    statusType = 'info';
+  }
 
-      <div className="btn-row" style={{ marginBottom: 24 }}>
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 40 }}>
+      <div className="toolbar">
         <div className="btn-group">
-          <span className="btn-group-label" style={{ marginRight: 8 }}>Size</span>
           <button
             className={`btn ${gridSize === 5 ? 'btn-primary' : 'btn-secondary'}`}
             onClick={() => handleSizeChange(5)}
@@ -184,20 +196,48 @@ export default function CreatorPage() {
           onClick={handleGenerate}
           disabled={!ready || generating}
         >
-          {generating ? 'Generating...' : 'Generate Crossword'}
+          {generating ? 'Generating...' : 'Generate Puzzle'}
         </button>
 
         <button
-          className="btn btn-export"
+          className="btn btn-secondary"
           onClick={handleShare}
           disabled={!puzzle || sharing}
         >
           {sharing ? 'Sharing...' : 'Share'}
         </button>
+
+        {statusMessage && (
+          <div className={`status-inline ${statusType}`}>
+            {shareUrl ? (
+              <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{shareUrl}</span>
+                <button className="btn btn-secondary btn-sm" onClick={handleCopyLink} style={{ flexShrink: 0 }}>Copy</button>
+              </span>
+            ) : statusMessage}
+          </div>
+        )}
       </div>
 
-      <div className="custom-words-section" style={{ marginBottom: 16 }}>
-        <h3>Custom Words (optional)</h3>
+      {puzzle && (
+        <div className="crossword-card">
+          <div className="crossword-card-grid">
+            <h3 style={{ marginBottom: 24 }}>
+              Preview <span className="text-hint" style={{ textTransform: 'none', letterSpacing: 'normal' }}>Click a letter to edit</span>
+            </h3>
+            <CrosswordGrid grid={puzzle.grid} entries={puzzle.entries} gridSize={puzzle.size} />
+          </div>
+          <div className="crossword-card-clues">
+            <h3 style={{ marginBottom: 24 }}>Clues</h3>
+            <ClueList entries={puzzle.entries} editable onClueEdit={handleClueEdit} />
+          </div>
+        </div>
+      )}
+
+      <div className="card">
+        <h3 style={{ marginBottom: 24 }}>
+          Custom Words <span className="text-hint" style={{ textTransform: 'none', letterSpacing: 'normal' }}>Optional</span>
+        </h3>
         <div className="custom-words-row">
           {customWords.map((word, i) => (
             <div key={i} className="custom-word-input-wrapper">
@@ -229,28 +269,6 @@ export default function CreatorPage() {
           ))}
         </div>
       </div>
-
-      {error && (
-        <div className="status error">{error}</div>
-      )}
-
-      {shareUrl && (
-        <div className="status success" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <span style={{ flex: 1, wordBreak: 'break-all' }}>{shareUrl}</span>
-          <button className="btn btn-secondary" onClick={handleCopyLink} style={{ flexShrink: 0 }}>
-            Copy Link
-          </button>
-        </div>
-      )}
-
-      {puzzle && (
-        <div style={{ marginTop: 24 }}>
-          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 24 }}>
-            <CrosswordGrid grid={puzzle.grid} entries={puzzle.entries} gridSize={puzzle.size} />
-          </div>
-          <ClueList entries={puzzle.entries} editable onClueEdit={handleClueEdit} />
-        </div>
-      )}
     </div>
   );
 }

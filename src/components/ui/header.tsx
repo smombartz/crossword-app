@@ -12,9 +12,12 @@ export function Header() {
 
   return (
     <header className="flex-between" style={{ padding: '16px 0', borderBottom: '1px solid #e2e2e2', marginBottom: '24px' }}>
-      <Link href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
-        <h1>Crossword</h1>
-      </Link>
+      <div>
+        <Link href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+          <h1>Crossword Generator</h1>
+        </Link>
+        <p className="text-body text-muted" style={{ marginTop: '4px' }}>Create Custom Crosswords</p>
+      </div>
       <div className="header-actions">
         {status === 'loading' ? null : isLoggedIn ? (
           <>
@@ -25,7 +28,7 @@ export function Header() {
             <button className="btn btn-secondary btn-sm" onClick={() => signOut()}>Log out</button>
           </>
         ) : (
-          <button className="btn btn-primary btn-sm" onClick={() => signIn('google')}>Sign in</button>
+          <button className="btn btn-secondary" onClick={() => signIn('google')}>Login</button>
         )}
       </div>
     </header>
