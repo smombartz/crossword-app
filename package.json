@@ -11,7 +11,8 @@
     "test:engine": "vitest run tests/engine",
     "test:e2e": "playwright test",
     "typecheck": "tsc --noEmit",
-    "build:wordlist": "tsx scripts/build-wordlist.ts"
+    "build:wordlist": "tsx scripts/build-wordlist.ts",
+    "import:clues": "tsx scripts/import-clues.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.49.1",

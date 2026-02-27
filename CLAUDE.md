@@ -13,7 +13,7 @@ A shareable crossword puzzle web app. Users generate 13×13 crossword puzzles cl
 - **Framework:** Next.js 14+ (App Router)
 - **Language:** TypeScript (strict mode)
 - **Styling:** Custom CSS (`src/styles/crossword-styles.css` + `styleguide.md`)
-- **Word List:** `wordlist.db` (SQLite, project root) → `public/wordlist.json` (compact JSON, served to clients)
+- **Word List:** `wordlist.db` (SQLite, project root) → `public/wordlist.json` (compact JSON, served to clients). Clues can be bulk-imported from an external DB via `pnpm import:clues`, then `pnpm build:wordlist` regenerates the JSON.
 - **Auth:** NextAuth.js / Auth.js with Google OAuth provider
 - **Database:** Supabase (Postgres)
 - **Deployment:** Vercel
@@ -219,6 +219,7 @@ pnpm test:e2e       # Playwright E2E tests
 pnpm lint           # ESLint
 pnpm typecheck      # tsc --noEmit
 pnpm build:wordlist # Rebuild public/wordlist.json from wordlist.db
+pnpm import:clues   # Import clues from new-crossword_clues.db into wordlist.db
 ```
 
 ---
@@ -254,19 +255,6 @@ pnpm lint && pnpm typecheck && pnpm test:engine
 ```
 
 All three must pass. Don't skip the typecheck — TypeScript strict mode catches real bugs.
-
-## Shortcuts
-
-### `ctgh` — Commit to GitHub
-
-When the user says **ctgh**, immediately:
-
-1. Run `pnpm lint && pnpm typecheck && pnpm test:engine` to verify nothing is broken
-2. Stage all relevant changed files (do NOT use `git add .` — stage specific files)
-3. Write a concise commit message summarizing the completed feature/change
-4. Commit to the current branch on GitHub
-
----
 
 ## Common Patterns
 

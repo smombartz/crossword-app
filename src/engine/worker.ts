@@ -44,6 +44,13 @@ self.onmessage = async (e: MessageEvent) => {
     return;
   }
 
+  if (type === 'validate-word') {
+    const word = (payload?.word ?? '').toUpperCase();
+    const valid = wordList ? wordList.hasWord(word) : false;
+    self.postMessage({ type: 'validate-word-result', word, valid });
+    return;
+  }
+
   if (type === 'generate') {
     try {
       if (!wordList) throw new Error('Word list not loaded');

@@ -94,6 +94,7 @@ Open [http://localhost:3000](http://localhost:3000).
 | `pnpm typecheck` | TypeScript type checking |
 | `pnpm lint` | ESLint |
 | `pnpm build:wordlist` | Rebuild `public/wordlist.json` from `wordlist.db` |
+| `pnpm import:clues` | Import clues from an external SQLite DB (`new-crossword_clues.db`) into `wordlist.db` |
 
 ## Project Structure
 

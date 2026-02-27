@@ -141,7 +141,7 @@ a:active { color: #255980; }
   white-space: nowrap;
 }
 .btn-group .btn { border-radius: 0; padding: 8px 16px; font-size: 0.8rem; }
-.btn-group .btn:last-child { border-left: 1px solid #fff; }
+.btn-group .btn + .btn { border-left: 1px solid #fff; }
 
 /* ============================================================
    Form Controls
@@ -313,6 +313,10 @@ input[type="password"] {
 .grid-container.grid-size-7 .grid-cell { width: 72px; height: 72px; font-size: 1.6rem; }
 .grid-container.grid-size-7 .grid-cell .cell-number { font-size: 0.65rem; }
 
+/* Grid size variants — 5x5 gets even larger cells (5×88=440px) */
+.grid-container.grid-size-5 .grid-cell { width: 88px; height: 88px; font-size: 1.8rem; }
+.grid-container.grid-size-5 .grid-cell .cell-number { font-size: 0.7rem; }
+
 /* ============================================================
    Clue List
    ============================================================ */
@@ -407,6 +411,40 @@ input[type="password"] {
 .celebrate { animation: pop 0.4s ease; }
 
 /* ============================================================
+   Custom Words Input
+   ============================================================ */
+.custom-words-section { margin-top: 8px; }
+.custom-words-row { display: flex; gap: 10px; margin-top: 8px; flex-wrap: wrap; }
+.custom-word-input-wrapper { flex: 1; min-width: 120px; max-width: 180px; }
+.custom-word-input {
+  width: 100%;
+  padding: 8px 28px 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.custom-word-input:focus { outline: 2px solid #326891; border-color: #326891; }
+.custom-word-input.input-error { border-color: #cc0000; }
+.custom-word-clear {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  color: #888;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+}
+.custom-word-clear:hover { color: #cc0000; }
+.custom-word-error { font-size: 0.72rem; color: #cc0000; margin-top: 2px; }
+
+/* ============================================================
    Responsive — Mobile (max-width: 640px)
    ============================================================ */
 @media (max-width: 640px) {
@@ -450,12 +488,20 @@ input[type="password"] {
   .grid-container.grid-size-7 .grid-cell { width: 48px !important; height: 48px !important; font-size: 1.3rem; }
   .grid-container.grid-size-7 .grid-cell .cell-number { font-size: 0.52rem; }
 
+  /* 5x5 — larger cells on mobile since fewer cells (5×56=280px fits 375px screens) */
+  .grid-container.grid-size-5 .grid-cell { width: 56px !important; height: 56px !important; font-size: 1.4rem; }
+  .grid-container.grid-size-5 .grid-cell .cell-number { font-size: 0.55rem; }
+
   /* Clues — single column */
   .clue-columns { flex-direction: column; gap: 20px; }
   .clue-column { min-width: unset; }
 
   /* Editable clues — always show edit icon on touch devices */
   .clue-edit-icon { opacity: 0.4; }
+
+  /* Custom words — stack on mobile */
+  .custom-words-row { flex-direction: column; }
+  .custom-word-input-wrapper { max-width: 100%; }
 
   /* Settings */
   .settings-row { flex-direction: column; gap: 10px; }
