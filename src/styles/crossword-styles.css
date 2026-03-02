@@ -302,6 +302,32 @@ input[type="password"] {
 }
 .clue-refresh:hover { background: #f0f0f0; color: #121212; }
 
+.clue-sparkle {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  color: #5a5a5a;
+  cursor: pointer;
+  padding: 0;
+}
+.clue-sparkle:hover { background: #f0f0f0; color: #326891; }
+.clue-sparkle:disabled { color: #ccc; cursor: not-allowed; }
+
+.spinner-dot {
+  font-size: 0.7rem;
+  animation: pulse 1s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
 /* Clickable clue (player) */
 .clue-item {
   font-size: 0.85rem;

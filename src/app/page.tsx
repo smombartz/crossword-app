@@ -19,6 +19,7 @@ export default function CreatorPage() {
   const [customWords, setCustomWords] = useState<string[]>(['', '', '']);
   const [wordErrors, setWordErrors] = useState<(string | null)[]>([null, null, null]);
   const clueCache = useRef<Map<string, string[]>>(new Map());
+  const [aiGeneratingKey, setAiGeneratingKey] = useState<string | null>(null);
 
   const handleSizeChange = (size: 5 | 7 | 13) => {
     setGridSize(size);
@@ -165,6 +166,52 @@ export default function CreatorPage() {
     handleClueEdit(number, direction, clues[nextIndex]);
   }, [puzzle, getClues, handleClueEdit]);
 
+  const handleAiClue = useCallback(async (number: number, direction: Direction) => {
+    if (!puzzle || !session?.user) return;
+    const entry = puzzle.entries.find(e => e.number === number && e.direction === direction);
+    if (!entry?.answer) return;
+
+    const key = `${number}-${direction}`;
+    setAiGeneratingKey(key);
+    setError(null);
+
+    try {
+      // Ensure clue cache is populated from the worker BEFORE adding AI clue
+      let cached = clueCache.current.get(entry.answer);
+      if (!cached) {
+        const fetched = await getClues(entry.answer);
+        cached = [...fetched];
+        clueCache.current.set(entry.answer, cached);
+      }
+
+      const res = await fetch('/api/clues/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          word: entry.answer,
+          existingClues: cached,
+        }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || 'Failed to generate clue');
+      }
+
+      const { clue } = await res.json();
+      handleClueEdit(number, direction, clue);
+
+      // Append AI clue to the already-populated cache
+      if (!cached.includes(clue)) {
+        cached.push(clue);
+      }
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setAiGeneratingKey(null);
+    }
+  }, [puzzle, session, handleClueEdit, getClues]);
+
   // Derive inline status message
   let statusMessage: string | null = null;
   let statusType: 'success' | 'error' | 'info' = 'info';
@@ -250,7 +297,7 @@ export default function CreatorPage() {
           </div>
           <div className="crossword-card-clues">
             <h3>Clues</h3>
-            <ClueList entries={puzzle.entries} editable onClueEdit={handleClueEdit} onClueRefresh={handleClueRefresh} />
+            <ClueList entries={puzzle.entries} editable onClueEdit={handleClueEdit} onClueRefresh={handleClueRefresh} onAiClue={handleAiClue} aiGeneratingKey={aiGeneratingKey} />
           </div>
         </div>
       )}
