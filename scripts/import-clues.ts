@@ -1,5 +1,5 @@
 /**
- * Import clues from new-crossword_clues.db into wordlist.db
+ * Import clues from crossword_clues.db into wordlist.db
  *
  * Merges clues for words that already have them (deduplicating),
  * and copies clues for words that don't.
@@ -16,7 +16,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const mainDbPath = join(__dirname, '..', 'wordlist.db');
-const newDbPath = join(__dirname, '..', 'new-crossword_clues.db');
+const newDbPath = join(__dirname, '..', 'crossword_clues.db');
 
 const mainDb = new Database(mainDbPath);
 const newDb = new Database(newDbPath, { readonly: true });

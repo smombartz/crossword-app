@@ -53,11 +53,17 @@ const SECTIONS: FieldSection[] = [
   },
 ];
 
+interface DictStats {
+  totalWords: number;
+  withoutClues: number;
+}
+
 export function AdminSettingsClient() {
   const [presets, setPresets] = useState<Preset[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState<number | null>(null);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [dictStats, setDictStats] = useState<DictStats | null>(null);
 
   useEffect(() => {
     fetch('/api/presets', { cache: 'no-store' })
@@ -70,6 +76,21 @@ export function AdminSettingsClient() {
         setMessage({ type: 'error', text: 'Failed to load presets' });
         setLoading(false);
       });
+
+    fetch('/wordlist.json')
+      .then(res => res.json())
+      .then((data: Record<string, [string, string[]][]>) => {
+        let totalWords = 0;
+        let withoutClues = 0;
+        for (const words of Object.values(data)) {
+          for (const [word, clues] of words) {
+            totalWords++;
+            if (clues.length === 0 || (clues.length === 1 && clues[0].toUpperCase() === word.toUpperCase())) withoutClues++;
+          }
+        }
+        setDictStats({ totalWords, withoutClues });
+      })
+      .catch(() => { /* silently ignore — stats are non-critical */ });
   }, []);
 
   const handleChange = (gridSize: number, key: keyof Preset, value: string) => {
@@ -109,28 +130,37 @@ export function AdminSettingsClient() {
   if (loading) return <div className="status info">Loading presets...</div>;
 
   return (
-    <div style={{ marginTop: 24 }}>
-      <div className="setting-hint" style={{ fontSize: '0.8rem', lineHeight: 1.6, marginBottom: 8 }}>
+    <div className="settings-intro">
+      <div className="setting-hint">
         The generator runs a two-phase pipeline: first it builds a <strong>pattern</strong> (symmetric
         black-cell layout satisfying density and span constraints), then it <strong>fills</strong> the
         white cells with words via backtracking. If the fill deadlocks, it discards the pattern and
         retries. The settings below control each phase.
       </div>
 
+      {dictStats && (
+        <div className="setting-hint" style={{ marginBottom: '1rem' }}>
+          <strong>Dictionary:</strong> {dictStats.totalWords.toLocaleString()} words
+          {' — '}
+          {dictStats.withoutClues.toLocaleString()} without clues
+          {' '}({((dictStats.withoutClues / dictStats.totalWords) * 100).toFixed(1)}%)
+        </div>
+      )}
+
       {message && (
         <div className={`status ${message.type}`}>{message.text}</div>
       )}
 
       {presets.map(preset => (
-        <div key={preset.grid_size} className="card" style={{ marginTop: 16 }}>
+        <div key={preset.grid_size} className="card">
           <h2>{preset.grid_size}&times;{preset.grid_size}</h2>
 
           {SECTIONS.map(section => (
-            <div key={section.title} style={{ marginTop: 20 }}>
-              <h3 style={{ fontSize: '0.85rem', fontWeight: 700, marginBottom: 4 }}>
+            <div key={section.title} className="settings-section">
+              <h4>
                 {section.title}
-              </h3>
-              <div className="setting-hint" style={{ marginBottom: 4 }}>
+              </h4>
+              <div className="setting-hint">
                 {section.note}
               </div>
 
@@ -142,18 +172,12 @@ export function AdminSettingsClient() {
                   </div>
                   <div className="setting-input">
                     <input
+                      className="input"
                       type="number"
                       step={step}
                       min={min}
                       value={preset[key]}
                       onChange={e => handleChange(preset.grid_size, key, e.target.value)}
-                      style={{
-                        width: '100%',
-                        padding: '8px 12px',
-                        border: '1px solid #ccc',
-                        borderRadius: 4,
-                        fontSize: '0.9rem',
-                      }}
                     />
                   </div>
                 </div>
@@ -161,7 +185,7 @@ export function AdminSettingsClient() {
             </div>
           ))}
 
-          <div style={{ marginTop: 16 }}>
+          <div className="card-actions">
             <button
               className="btn btn-primary"
               onClick={() => handleSave(preset)}

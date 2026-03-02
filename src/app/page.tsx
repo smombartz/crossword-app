@@ -8,7 +8,7 @@ import { ClueList } from '@/components/clues/clue-list';
 import type { Puzzle, Direction } from '@/engine/types';
 
 export default function CreatorPage() {
-  const { generate, validateWord, ready, error: workerError } = usePuzzleGenerator();
+  const { generate, validateWord, getClues, ready, error: workerError } = usePuzzleGenerator();
   const { data: session } = useSession();
   const [puzzle, setPuzzle] = useState<Puzzle | null>(null);
   const [generating, setGenerating] = useState(false);
@@ -18,6 +18,7 @@ export default function CreatorPage() {
   const [gridSize, setGridSize] = useState<5 | 7 | 13>(5);
   const [customWords, setCustomWords] = useState<string[]>(['', '', '']);
   const [wordErrors, setWordErrors] = useState<(string | null)[]>([null, null, null]);
+  const clueCache = useRef<Map<string, string[]>>(new Map());
 
   const handleSizeChange = (size: 5 | 7 | 13) => {
     setGridSize(size);
@@ -79,6 +80,7 @@ export default function CreatorPage() {
         size: gridSize,
         customWords: validCustomWords.length > 0 ? validCustomWords : undefined,
       });
+      clueCache.current.clear();
       setPuzzle(result);
     } catch (err) {
       setError((err as Error).message || "Couldn't generate a puzzle. Try again!");
@@ -144,6 +146,25 @@ export default function CreatorPage() {
     });
   }, []);
 
+  const handleClueRefresh = useCallback(async (number: number, direction: Direction) => {
+    if (!puzzle) return;
+    const entry = puzzle.entries.find(e => e.number === number && e.direction === direction);
+    if (!entry?.answer) return;
+
+    const word = entry.answer;
+    let clues = clueCache.current.get(word);
+    if (!clues) {
+      const fetched = await getClues(word);
+      clues = [...fetched];
+      clueCache.current.set(word, clues);
+    }
+    if (clues.length === 0) return;
+
+    const currentIndex = clues.indexOf(entry.clue);
+    const nextIndex = (currentIndex + 1) % clues.length;
+    handleClueEdit(number, direction, clues[nextIndex]);
+  }, [puzzle, getClues, handleClueEdit]);
+
   // Derive inline status message
   let statusMessage: string | null = null;
   let statusType: 'success' | 'error' | 'info' = 'info';
@@ -165,7 +186,7 @@ export default function CreatorPage() {
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 40 }}>
+    <div className="page-stack">
       <div className="toolbar">
         <div className="btn-group">
           <button
@@ -208,11 +229,11 @@ export default function CreatorPage() {
         </button>
 
         {statusMessage && (
-          <div className={`status-inline ${statusType}`}>
+          <div className={`status ${statusType}`}>
             {shareUrl ? (
-              <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{shareUrl}</span>
-                <button className="btn btn-secondary btn-sm" onClick={handleCopyLink} style={{ flexShrink: 0 }}>Copy</button>
+              <span className="share-url">
+                <span className="share-url-text">{shareUrl}</span>
+                <button className="btn btn-secondary btn-sm" onClick={handleCopyLink}>Copy</button>
               </span>
             ) : statusMessage}
           </div>
@@ -220,30 +241,29 @@ export default function CreatorPage() {
       </div>
 
       {puzzle && (
-        <div className="crossword-card">
+        <div className="card crossword-card">
           <div className="crossword-card-grid">
-            <h3 style={{ marginBottom: 24 }}>
-              Preview <span className="text-hint" style={{ textTransform: 'none', letterSpacing: 'normal' }}>Click a letter to edit</span>
+            <h3>
+              Preview <span className="text-hint">Click a letter to edit</span>
             </h3>
             <CrosswordGrid grid={puzzle.grid} entries={puzzle.entries} gridSize={puzzle.size} />
           </div>
           <div className="crossword-card-clues">
-            <h3 style={{ marginBottom: 24 }}>Clues</h3>
-            <ClueList entries={puzzle.entries} editable onClueEdit={handleClueEdit} />
+            <h3>Clues</h3>
+            <ClueList entries={puzzle.entries} editable onClueEdit={handleClueEdit} onClueRefresh={handleClueRefresh} />
           </div>
         </div>
       )}
 
       <div className="card">
-        <h3 style={{ marginBottom: 24 }}>
-          Custom Words <span className="text-hint" style={{ textTransform: 'none', letterSpacing: 'normal' }}>Optional</span>
+        <h3>
+          Custom Words <span className="text-hint">Optional</span>
         </h3>
         <div className="custom-words-row">
           {customWords.map((word, i) => (
             <div key={i} className="custom-word-input-wrapper">
-              <div style={{ position: 'relative' }}>
                 <input
-                  className={`custom-word-input${wordErrors[i] ? ' input-error' : ''}`}
+                  className={`input custom-word-input${wordErrors[i] ? ' input-error' : ''}`}
                   type="text"
                   placeholder={`Word ${i + 1}`}
                   value={word}
@@ -261,7 +281,6 @@ export default function CreatorPage() {
                     &times;
                   </button>
                 )}
-              </div>
               {wordErrors[i] && (
                 <div className="custom-word-error">{wordErrors[i]}</div>
               )}

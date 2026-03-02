@@ -83,7 +83,6 @@ export function CrosswordGrid({
   return (
     <div
       className={`grid-container${gridSize ? ` grid-size-${gridSize}` : ''}`}
-      style={{ position: 'relative' }}
       tabIndex={playerGrid ? 0 : undefined}
       onKeyDown={!playerGrid ? onKeyDown : undefined}
     >
@@ -116,13 +115,7 @@ export function CrosswordGrid({
       {playerGrid && (
         <input
           ref={inputRef}
-          style={{
-            position: 'absolute',
-            opacity: 0,
-            width: 0,
-            height: 0,
-            pointerEvents: 'none',
-          }}
+          className="sr-only"
           onKeyDown={onKeyDown}
           autoComplete="off"
           autoCapitalize="characters"

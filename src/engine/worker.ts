@@ -51,6 +51,13 @@ self.onmessage = async (e: MessageEvent) => {
     return;
   }
 
+  if (type === 'getClues') {
+    const word = (payload?.word ?? '').toUpperCase();
+    const clues = wordList ? wordList.getAllClues(word) : [];
+    self.postMessage({ type: 'clues-result', word, clues });
+    return;
+  }
+
   if (type === 'generate') {
     try {
       if (!wordList) throw new Error('Word list not loaded');

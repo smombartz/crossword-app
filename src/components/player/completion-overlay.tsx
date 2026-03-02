@@ -47,25 +47,17 @@ export function CompletionOverlay({ time, creatorName, shareUrl, onDismiss }: Co
   };
 
   return (
-    <div style={{
-      position: 'fixed',
-      inset: 0,
-      background: 'rgba(255,255,255,0.9)',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      zIndex: 1000,
-    }}>
-      <div className="card text-center" style={{ maxWidth: 400, padding: '40px 32px' }}>
-        <h1 style={{ marginBottom: 8 }}>Congratulations!</h1>
-        <p className="text-body" style={{ margin: '16px 0' }}>
+    <div className="overlay">
+      <div className="card overlay-card text-center">
+        <h1>Congratulations!</h1>
+        <p className="text-body">
           You solved it in <strong>{time}</strong>
         </p>
-        <div className="btn-row" style={{ justifyContent: 'center' }}>
-          <button className="btn btn-export" onClick={handleShareTime}>
+        <div className="overlay-actions">
+          <button className="btn btn-primary" onClick={handleShareTime}>
             Share Your Time
           </button>
-          <a href="/" className="btn btn-secondary" style={{ textDecoration: 'none' }}>
+          <a href="/" className="btn btn-secondary">
             Play Another
           </a>
         </div>

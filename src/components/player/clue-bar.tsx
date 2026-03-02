@@ -10,7 +10,7 @@ export function ClueBar({ activeEntry }: ClueBarProps) {
   if (!activeEntry) return null;
 
   return (
-    <div className="text-body" style={{ padding: '8px 0', fontWeight: 500 }}>
+    <div className="clue-bar">
       <strong>{activeEntry.number} {activeEntry.direction === 'across' ? 'Across' : 'Down'}</strong>
       {' — '}
       {activeEntry.clue}

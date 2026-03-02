@@ -8,6 +8,7 @@ export interface WordList {
   getClue(word: string): string;
   wordsMatchingPattern(length: number, constraints: Map<number, string>): readonly WordEntry[];
   hasWord(word: string): boolean;
+  getAllClues(word: string): readonly string[];
 }
 
 type RawWordListData = Record<string, [string, string[]][]>;
@@ -54,6 +55,10 @@ export function loadWordList(data: RawWordListData): WordList {
     hasWord(word: string): boolean {
       const upper = word.toUpperCase();
       return clueMap.has(upper);
+    },
+
+    getAllClues(word: string): readonly string[] {
+      return clueMap.get(word.toUpperCase()) ?? [];
     },
   };
 }

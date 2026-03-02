@@ -26,25 +26,26 @@ body {
    ============================================================ */
 
 /* Display / Headings — serif */
-h1, h2, .heading-display {
+h1, h2 {
   font-family: 'Libre Baskerville', Georgia, 'Times New Roman', serif;
   font-weight: 700;
 }
 
 h1 { font-size: 1.6rem; }
-h2 { font-size: 1.1rem; }
+h2 { font-size: 1.1rem; margin-bottom: 16px; }
 
 /* Section headings — sans, uppercase */
-h3, .heading-section {
+h3 {
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: #5a5a5a;
   font-weight: 600;
+  margin-bottom: 24px;
 }
 
 /* Sub-section headings */
-h4, .heading-subsection {
+h4 {
   font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -57,10 +58,8 @@ h4, .heading-subsection {
 /* Body text */
 .text-body { font-size: 0.85rem; }
 .text-small { font-size: 0.8rem; }
-.text-xs { font-size: 0.72rem; }
 .text-muted { color: #5a5a5a; }
-.text-hint { font-size: 0.72rem; color: #888; }
-.text-mono { font-family: monospace; }
+.text-hint { font-size: 0.72rem; color: #888; text-transform: none; letter-spacing: normal; }
 
 /* ============================================================
    Colors
@@ -112,6 +111,8 @@ a:active { color: #255980; }
   font-weight: 600;
   cursor: pointer;
   transition: background 0.15s, transform 0.1s;
+  display: inline-block;
+  text-decoration: none;
 }
 .btn:active { transform: scale(0.97); }
 
@@ -121,14 +122,9 @@ a:active { color: #255980; }
 
 .btn-secondary { color: #121212; border: 1px solid #121212; }
 .btn-secondary:hover { background: #f0f0f0; }
-
-.btn-export { background: #326891; color: #fff; }
-.btn-export:hover { background: #255473; }
-.btn-export:disabled { background: #ccc; color: #888; cursor: not-allowed; }
+.btn-secondary:disabled { background: #fff; color: #888; border-color: #ccc; cursor: not-allowed; }
 
 .btn-sm { padding: 5px 12px; font-size: 0.78rem; }
-
-.btn-row { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
 
 /* Toolbar — right-aligned action bar */
 .toolbar {
@@ -138,93 +134,32 @@ a:active { color: #255980; }
   flex-wrap: wrap;
 }
 
-/* Inline status (used inside toolbar) */
-.status-inline {
-  flex: 1;
-  min-width: 0;
-  padding: 9px 17px;
-  border-radius: 4px;
-  font-size: 0.85rem;
-  background: #f7f7f7;
-  border: 1px solid #e2e2e2;
-}
-.status-inline.success { color: #1a7a2e; }
-.status-inline.error { color: #cc0000; }
-.status-inline.info { color: #326891; }
-
 /* Button group (segmented control) */
 .btn-group { display: inline-flex; border-radius: 4px; overflow: hidden; }
-.btn-group-label {
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: #5a5a5a;
-  display: flex;
-  align-items: center;
-  white-space: nowrap;
-}
 .btn-group .btn { border-radius: 0; padding: 8px 16px; font-size: 0.8rem; }
 .btn-group .btn + .btn { border-left: 1px solid #fff; }
 
 /* ============================================================
    Form Controls
    ============================================================ */
-.form-row {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  margin-bottom: 12px;
-  flex-wrap: wrap;
-}
-.form-row label {
-  font-weight: 600;
-  font-size: 0.85rem;
-  min-width: 100px;
-}
-.form-row input {
+.input {
   padding: 8px 12px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  font-size: 0.9rem;
-  width: 160px;
+  font-size: 0.85rem;
+  font-family: inherit;
+  background: #fff;
+  width: 100%;
 }
-.form-row input.wide-input { width: 300px; }
+.input:focus { outline: 2px solid #326891; border-color: #326891; }
+.input.input-error { border-color: #cc0000; }
 
 input[type="password"] {
-  width: 100%;
-  padding: 8px 10px;
+  padding: 8px 12px;
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 0.85rem;
   font-family: monospace;
-}
-
-/* ============================================================
-   Tabs
-   ============================================================ */
-.tabs {
-  display: flex;
-  gap: 0;
-  border-bottom: 2px solid #e2e2e2;
-  margin-bottom: 0;
-}
-.tab {
-  padding: 10px 18px;
-  background: none;
-  border: none;
-  border-bottom: 3px solid transparent;
-  border-radius: 0;
-  cursor: pointer;
-  font-size: 0.85rem;
-  font-weight: 500;
-  color: #5a5a5a;
-  transition: color 0.15s, border-color 0.15s;
-  margin-bottom: -2px;
-}
-.tab:hover { color: #121212; }
-.tab.active {
-  color: #121212;
-  border-bottom-color: #121212;
-  font-weight: 700;
 }
 
 /* ============================================================
@@ -236,19 +171,8 @@ input[type="password"] {
   padding: 24px 28px;
 }
 
-.panel {
-  background: #fff;
-  border: 1px solid #e2e2e2;
-  border-top: none;
-  border-radius: 0 0 4px 4px;
-  padding: 24px;
-}
-
-/* Crossword card — grid + clues side by side */
+/* Crossword card — grid + clues side by side (extends .card) */
 .crossword-card {
-  border: 1px solid #e2e2e2;
-  border-radius: 8px;
-  padding: 25px 29px;
   display: flex;
   gap: 40px;
   align-items: flex-start;
@@ -272,39 +196,33 @@ input[type="password"] {
 }
 .settings-row + .settings-row { border-top: 1px solid #eee; }
 .setting-label { font-weight: 600; font-size: 0.85rem; min-width: 120px; }
-.setting-hint { font-size: 0.72rem; color: #888; margin-top: 4px; }
+.setting-hint { font-size: 0.75rem; color: #888; margin-top: 4px; line-height: 1.6; }
 .setting-input { flex: 1; max-width: 340px; }
 
 /* ============================================================
    Status Messages
    ============================================================ */
 .status {
-  margin-top: 12px;
-  padding: 10px 14px;
+  padding: 9px 14px;
   border-radius: 4px;
   font-size: 0.85rem;
-  display: none;
+  background: #f7f7f7;
+  border: 1px solid #e2e2e2;
 }
-.status.info { display: block; background: #f7f7f7; color: #326891; border: 1px solid #e2e2e2; }
-.status.success { display: block; background: #f7f7f7; color: #1a7a2e; border: 1px solid #e2e2e2; }
-.status.error { display: block; background: #f7f7f7; color: #cc0000; border: 1px solid #e2e2e2; }
+.status.success { color: #1a7a2e; }
+.status.error { color: #cc0000; }
+.status.info { color: #326891; }
 
-/* Inline status indicators */
-.status-done { color: #1a7a2e; }
-.status-active { color: #326891; font-weight: 600; }
-.status-pending { color: #999; }
-.status-error { color: #cc0000; }
-.status-text { font-size: 0.8rem; color: #888; margin-top: 4px; }
 .countdown { font-variant-numeric: tabular-nums; }
 
 /* ============================================================
    Crossword Grid
    ============================================================ */
-.grid-container { display: inline-block; border: 2px solid #121212; border-radius: 8px; overflow: hidden; }
+.grid-container { display: inline-block; border: 2px solid #121212; border-radius: 8px; overflow: hidden; position: relative; }
 .grid-row { display: flex; }
 .grid-cell {
-  width: 52px;
-  height: 52px;
+  width: 48px;
+  height: 48px;
   border: 0.5px solid #121212;
   display: flex;
   align-items: center;
@@ -327,9 +245,6 @@ input[type="password"] {
 /* Interactive grid states */
 .grid-cell.highlight { background: #a7d8ff; }
 .grid-cell.active { background: #ffda00; }
-.grid-cell.editable { cursor: pointer; }
-.grid-cell.editable:hover { background: #ffda00; }
-
 .grid-cell input {
   width: 100%;
   height: 100%;
@@ -342,19 +257,7 @@ input[type="password"] {
   text-transform: uppercase;
 }
 
-/* Grid — 7x7 smaller variant */
-.grid-cell.sm { width: 38px; height: 38px; font-size: 1rem; }
-
-/* Player view — slightly larger cells for solving comfort */
-.grid-cell.player { width: 56px; height: 56px; }
-
-/* Grid size variants — 7x7 gets larger cells to fill space proportionally */
-.grid-container.grid-size-7 .grid-cell { width: 72px; height: 72px; font-size: 1.6rem; }
-.grid-container.grid-size-7 .grid-cell .cell-number { font-size: 0.65rem; }
-
-/* Grid size variants — 5x5 gets even larger cells (5×88=440px) */
-.grid-container.grid-size-5 .grid-cell { width: 88px; height: 88px; font-size: 1.8rem; }
-.grid-container.grid-size-5 .grid-cell .cell-number { font-size: 0.7rem; }
+/* Grid size variants removed — all sizes use uniform 48px cells */
 
 /* ============================================================
    Clue List
@@ -378,13 +281,26 @@ input[type="password"] {
 }
 .clue-num { font-weight: 700; font-size: 0.85rem; min-width: 28px; }
 .clue-word { font-size: 0.75rem; color: #888; min-width: 50px; font-family: monospace; }
-.clue-row input {
+.clue-row .input {
   flex: 1;
-  padding: 6px 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 0.85rem;
 }
+.clue-refresh {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  color: #5a5a5a;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+.clue-refresh:hover { background: #f0f0f0; color: #121212; }
 
 /* Clickable clue (player) */
 .clue-item {
@@ -397,49 +313,10 @@ input[type="password"] {
 .clue-item.active-clue { color: #326891; font-weight: 600; }
 .clue-item .cn { font-weight: 700; margin-right: 4px; }
 
-/* Editable clue (creator view) */
-.clue-item-editable {
-  display: flex;
-  align-items: baseline;
-  gap: 4px;
-  border-radius: 4px;
-  padding: 4px 6px;
-  margin: 0 -6px;
-  transition: background 0.12s;
-}
-.clue-item-editable:hover { background: #f7f7f7; }
-
-.clue-edit-icon {
-  opacity: 0;
-  font-size: 0.72rem;
-  color: #888;
-  cursor: pointer;
-  flex-shrink: 0;
-  transition: opacity 0.12s;
-  margin-left: 2px;
-}
-.clue-item-editable:hover .clue-edit-icon { opacity: 1; }
-
-.clue-edit-input {
-  flex: 1;
-  font-size: 0.85rem;
-  font-family: inherit;
-  line-height: 1.3;
-  padding: 2px 6px;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  outline: none;
-}
-.clue-edit-input:focus { border-color: #326891; box-shadow: 0 0 0 2px rgba(50, 104, 145, 0.15); }
-
-/* Solution answer highlight */
-.answer { color: #326891; font-weight: 600; }
-
 /* ============================================================
    Layout Utilities
    ============================================================ */
 .container { max-width: 1100px; margin: 0 auto; padding: 20px; }
-.container-narrow { max-width: 500px; margin: 0 auto; }
 .flex-row { display: flex; align-items: center; gap: 16px; }
 .flex-between { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
 .text-center { text-align: center; }
@@ -448,33 +325,16 @@ input[type="password"] {
 .header-actions { display: flex; align-items: center; gap: 10px; }
 
 /* ============================================================
-   Animation
-   ============================================================ */
-@keyframes pop {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
-}
-.celebrate { animation: pop 0.4s ease; }
-
-/* ============================================================
    Custom Words Input
    ============================================================ */
-.custom-words-section { margin-top: 8px; }
 .custom-words-row { display: flex; gap: 10px; margin-top: 8px; flex-wrap: wrap; }
-.custom-word-input-wrapper { flex: 1; min-width: 120px; max-width: 180px; }
+.custom-word-input-wrapper { flex: 1; min-width: 120px; max-width: 180px; position: relative; }
 .custom-word-input {
-  width: 100%;
-  padding: 8px 28px 8px 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 0.85rem;
+  padding-right: 28px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
-.custom-word-input:focus { outline: 2px solid #326891; border-color: #326891; }
-.custom-word-input.input-error { border-color: #cc0000; }
 .custom-word-clear {
   position: absolute;
   right: 6px;
@@ -492,6 +352,74 @@ input[type="password"] {
 .custom-word-error { font-size: 0.72rem; color: #cc0000; margin-top: 2px; }
 
 /* ============================================================
+   App Header
+   ============================================================ */
+.app-header { padding: 16px 0; border-bottom: 1px solid #e2e2e2; margin-bottom: 24px; }
+.app-header a { text-decoration: none; color: inherit; }
+.app-header p { margin-top: 4px; }
+
+/* ============================================================
+   Page & Section Layouts
+   ============================================================ */
+.page-stack { display: flex; flex-direction: column; gap: 40px; }
+.toolbar .status { flex: 1; min-width: 0; }
+
+/* Share URL row */
+.share-url { display: flex; align-items: center; gap: 8px; }
+.share-url-text { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* Player layout */
+.player-header { margin-bottom: 16px; }
+.player-grid { margin: 16px 0; }
+.player-clues { margin-top: 24px; }
+
+/* Clue bar — active clue display */
+.clue-bar { font-size: 0.85rem; padding: 8px 0; font-weight: 500; }
+
+/* Timer */
+.timer { font-weight: 600; font-size: 1.1rem; }
+
+/* ============================================================
+   Overlay (modal)
+   ============================================================ */
+.overlay { position: fixed; inset: 0; background: rgba(255,255,255,0.9); display: flex; align-items: center; justify-content: center; z-index: 1000; }
+.overlay-card { max-width: 400px; padding: 40px 32px; }
+.overlay-card h1 { margin-bottom: 8px; }
+.overlay-card p { margin: 16px 0; }
+.overlay-actions { display: flex; gap: 10px; justify-content: center; margin-top: 16px; }
+
+/* ============================================================
+   Card Variants
+   ============================================================ */
+.card-compact { padding: 16px 20px; }
+.card + .card { margin-top: 16px; }
+
+/* ============================================================
+   Puzzle List (my puzzles)
+   ============================================================ */
+.puzzle-list { display: flex; flex-direction: column; gap: 12px; }
+
+/* ============================================================
+   404 Not Found
+   ============================================================ */
+.not-found { padding: 80px 20px; }
+.not-found p { margin: 16px 0; }
+
+/* ============================================================
+   Accessibility
+   ============================================================ */
+.sr-only { position: absolute; width: 0; height: 0; opacity: 0; pointer-events: none; }
+
+/* ============================================================
+   Admin Settings
+   ============================================================ */
+.settings-intro { margin-top: 24px; margin-bottom: 8px; }
+.settings-section { margin-top: 20px; }
+.settings-section h4 { border-bottom: none; padding-bottom: 0; margin-bottom: 4px; }
+.settings-section .setting-hint { margin-bottom: 4px; }
+.card-actions { margin-top: 16px; }
+
+/* ============================================================
    Responsive — Mobile (max-width: 640px)
    ============================================================ */
 @media (max-width: 640px) {
@@ -507,44 +435,16 @@ input[type="password"] {
   .header-actions { gap: 8px; }
   .header-actions .text-small { max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-  /* Tabs — horizontal scroll */
-  .tabs { overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
-  .tabs::-webkit-scrollbar { display: none; }
-  .tab { padding: 8px 12px; font-size: 0.78rem; flex-shrink: 0; }
-
-  /* Panels */
-  .panel { padding: 16px; }
   .card { padding: 16px; }
-
-  /* Forms */
-  .form-row { flex-direction: column; align-items: flex-start; gap: 8px; }
-  .form-row label { min-width: unset; }
-  .form-row input { width: 100%; }
-  .form-row input.wide-input { width: 100%; }
-  .form-row select { width: 100%; }
-  .btn-row { flex-direction: column; }
-  .btn-row .btn { width: 100%; }
 
   /* Grid — smaller cells */
   .grid-cell { width: 42px !important; height: 42px !important; font-size: 1.1rem; }
-  .grid-cell.player { width: 40px !important; height: 40px !important; }
   .grid-cell .cell-number { font-size: 0.48rem; }
   .grid-cell input { font-size: 1.1rem; }
-
-  /* 7x7 — larger cells on mobile since fewer cells (7×48=336px fits 375px screens) */
-  .grid-container.grid-size-7 .grid-cell { width: 48px !important; height: 48px !important; font-size: 1.3rem; }
-  .grid-container.grid-size-7 .grid-cell .cell-number { font-size: 0.52rem; }
-
-  /* 5x5 — larger cells on mobile since fewer cells (5×56=280px fits 375px screens) */
-  .grid-container.grid-size-5 .grid-cell { width: 56px !important; height: 56px !important; font-size: 1.4rem; }
-  .grid-container.grid-size-5 .grid-cell .cell-number { font-size: 0.55rem; }
 
   /* Clues — single column */
   .clue-columns { flex-direction: column; gap: 20px; }
   .clue-column { min-width: unset; }
-
-  /* Editable clues — always show edit icon on touch devices */
-  .clue-edit-icon { opacity: 0.4; }
 
   /* Custom words — stack on mobile */
   .custom-words-row { flex-direction: column; }

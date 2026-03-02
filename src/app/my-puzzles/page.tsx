@@ -20,7 +20,7 @@ export default async function MyPuzzlesPage() {
 
   return (
     <div>
-      <h2 style={{ marginBottom: 16 }}>My Puzzles</h2>
+      <h2>My Puzzles</h2>
 
       {!puzzles || puzzles.length === 0 ? (
         <p className="text-body text-muted">
@@ -28,26 +28,24 @@ export default async function MyPuzzlesPage() {
           <Link href="/">Create one!</Link>
         </p>
       ) : (
-        <div>
+        <div className="puzzle-list">
           {puzzles.map(puzzle => (
             <div
               key={puzzle.id}
-              className="card"
-              style={{ marginBottom: 12, padding: '16px 20px' }}
+              className="card card-compact"
             >
               <div className="flex-between">
                 <div>
-                  <span className="text-body" style={{ fontWeight: 600 }}>
+                  <strong className="text-body">
                     {puzzle.size}&times;{puzzle.size} Crossword
-                  </span>
+                  </strong>
                   <span className="text-small text-muted" style={{ marginLeft: 12 }}>
                     {new Date(puzzle.created_at).toLocaleDateString()}
                   </span>
                 </div>
                 <Link
                   href={`/play/${puzzle.share_slug}`}
-                  className="btn btn-secondary"
-                  style={{ textDecoration: 'none', padding: '6px 12px', fontSize: '0.8rem' }}
+                  className="btn btn-secondary btn-sm"
                 >
                   Play
                 </Link>

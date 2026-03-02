@@ -14,7 +14,7 @@ describe('loadWordList', () => {
   // Use a fresh word list for each test to avoid cross-test pollution
   // (especially for tests that rely on randomness)
   beforeEach(() => {
-    wl = loadWordList(sampleData as Parameters<typeof loadWordList>[0]);
+    wl = loadWordList(sampleData as unknown as Parameters<typeof loadWordList>[0]);
   });
 
   describe('getByLength', () => {
@@ -41,7 +41,7 @@ describe('loadWordList', () => {
       const lowerData = {
         "3": [["cat", ["A feline"]]],
       };
-      const wl2 = loadWordList(lowerData as Parameters<typeof loadWordList>[0]);
+      const wl2 = loadWordList(lowerData as unknown as Parameters<typeof loadWordList>[0]);
       const words = wl2.getByLength(3);
       expect(words[0].word).toBe('CAT');
     });

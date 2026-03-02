@@ -337,7 +337,7 @@ describe('isComplete', () => {
 
   it('returns false when even one white cell is empty', () => {
     const state = initPuzzleState(testPuzzle);
-    const almostFilledGrid = state.playerGrid.map((row, r) =>
+    const almostFilledGrid: string[][] = state.playerGrid.map((row, r) =>
       row.map((cell, c) => (pattern[r][c] === 1 ? 'X' : '#'))
     );
     almostFilledGrid[4][4] = ''; // Leave one cell empty

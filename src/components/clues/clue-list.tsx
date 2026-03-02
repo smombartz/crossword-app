@@ -17,14 +17,17 @@ interface ClueListProps {
   onClueClick?: (entry: ClueEntry) => void;
   editable?: boolean;
   onClueEdit?: (number: number, direction: Direction, newClue: string) => void;
+  onClueRefresh?: (number: number, direction: Direction) => void;
 }
 
 function CreatorClueRow({
   entry,
   onClueEdit,
+  onClueRefresh,
 }: {
   entry: ClueEntry;
   onClueEdit?: (number: number, direction: Direction, newClue: string) => void;
+  onClueRefresh?: (number: number, direction: Direction) => void;
 }) {
   const [draft, setDraft] = useState(entry.clue);
 
@@ -46,16 +49,24 @@ function CreatorClueRow({
       <span className="clue-num">{entry.number}.</span>
       {entry.answer && <span className="clue-word">{entry.answer}</span>}
       <input
+        className="input"
         value={draft}
         onChange={e => setDraft(e.target.value)}
         onKeyDown={e => { if (e.key === 'Enter') commit(); }}
         onBlur={commit}
       />
+      <button
+        className="btn-icon clue-refresh"
+        onClick={() => onClueRefresh?.(entry.number, entry.direction)}
+        title="Next clue"
+      >
+        ↻
+      </button>
     </div>
   );
 }
 
-export function ClueList({ entries, activeNumber, activeDirection, onClueClick, editable, onClueEdit }: ClueListProps) {
+export function ClueList({ entries, activeNumber, activeDirection, onClueClick, editable, onClueEdit, onClueRefresh }: ClueListProps) {
   const across = entries.filter(e => e.direction === 'across');
   const down = entries.filter(e => e.direction === 'down');
 
@@ -65,13 +76,13 @@ export function ClueList({ entries, activeNumber, activeDirection, onClueClick, 
         <div className="clue-section">
           <h4>Across</h4>
           {across.map(entry => (
-            <CreatorClueRow key={`${entry.number}a`} entry={entry} onClueEdit={onClueEdit} />
+            <CreatorClueRow key={`${entry.number}a`} entry={entry} onClueEdit={onClueEdit} onClueRefresh={onClueRefresh} />
           ))}
         </div>
         <div className="clue-section">
           <h4>Down</h4>
           {down.map(entry => (
-            <CreatorClueRow key={`${entry.number}d`} entry={entry} onClueEdit={onClueEdit} />
+            <CreatorClueRow key={`${entry.number}d`} entry={entry} onClueEdit={onClueEdit} onClueRefresh={onClueRefresh} />
           ))}
         </div>
       </div>

@@ -70,5 +70,20 @@ export function usePuzzleGenerator() {
     });
   }, []);
 
-  return { generate, validateWord, ready, error };
+  const getClues = useCallback((word: string): Promise<readonly string[]> => {
+    return new Promise((resolve) => {
+      const worker = workerRef.current;
+      if (!worker) return resolve([]);
+      const handler = (e: MessageEvent) => {
+        if (e.data.type === 'clues-result' && e.data.word === word.toUpperCase()) {
+          worker.removeEventListener('message', handler);
+          resolve(e.data.clues);
+        }
+      };
+      worker.addEventListener('message', handler);
+      worker.postMessage({ type: 'getClues', payload: { word } });
+    });
+  }, []);
+
+  return { generate, validateWord, getClues, ready, error };
 }

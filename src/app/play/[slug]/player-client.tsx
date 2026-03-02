@@ -126,17 +126,11 @@ export function PlayerClient({ puzzle }: PlayerClientProps) {
   return (
     <div>
       {/* Header bar: puzzle info + timer */}
-      <div
-        className="flex-between"
-        style={{ marginBottom: 16 }}
-      >
+      <div className="flex-between player-header">
         <div>
           <h1>{puzzle.creatorName ? `${puzzle.creatorName}'s Crossword` : 'Crossword'}</h1>
         </div>
-        <div
-          className="text-body countdown"
-          style={{ fontWeight: 600, fontSize: '1.1rem' }}
-        >
+        <div className="text-body countdown timer">
           {timer.formatted}
         </div>
       </div>
@@ -145,7 +139,7 @@ export function PlayerClient({ puzzle }: PlayerClientProps) {
       <ClueBar activeEntry={activeEntry} />
 
       {/* Interactive crossword grid */}
-      <div style={{ margin: '16px 0' }}>
+      <div className="player-grid">
         <CrosswordGrid
           grid={baseGrid}
           entries={puzzle.entries as unknown as readonly Entry[]}
@@ -159,7 +153,7 @@ export function PlayerClient({ puzzle }: PlayerClientProps) {
       </div>
 
       {/* Clue list */}
-      <div style={{ marginTop: 24 }}>
+      <div className="player-clues">
         <ClueList
           entries={puzzle.entries}
           activeNumber={activeEntry?.number ?? null}
