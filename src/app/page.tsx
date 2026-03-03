@@ -299,7 +299,7 @@ export default function CreatorPage() {
         )}
       </div>
 
-      {generating && (
+      {(generating || (!ready && !puzzle)) && (
         <div className="card crossword-card">
           <div className="crossword-card-grid">
             <h3>Preview</h3>
