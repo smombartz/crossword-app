@@ -259,6 +259,16 @@ input[type="password"] {
 
 /* Grid size variants removed — all sizes use uniform 48px cells */
 
+/* Skeleton grid — loading placeholder */
+.skeleton-cell {
+  animation: skeleton-fade 3s ease-in-out infinite;
+}
+
+@keyframes skeleton-fade {
+  0%, 100% { background: #fff; }
+  35%, 45% { background: #121212; }
+}
+
 /* ============================================================
    Clue List
    ============================================================ */
