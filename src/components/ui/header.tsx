@@ -28,7 +28,10 @@ export function Header() {
             <button className="btn btn-secondary btn-sm" onClick={() => signOut()}>Log out</button>
           </>
         ) : (
-          <button className="btn btn-secondary" onClick={() => signIn('google')}>Login</button>
+          <button className="btn btn-secondary" onClick={() => {
+            window.dispatchEvent(new Event('xword:before-sign-in'));
+            signIn('google');
+          }}>Login</button>
         )}
       </div>
     </header>

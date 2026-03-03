@@ -1,5 +1,17 @@
 # Change Log
 
+## 2026-03-02 — Preserve Puzzle Across OAuth Redirect
+
+- Added `sessionStorage` helpers (`savePendingShare`, `loadPendingShare`, `clearPendingShare`) to persist puzzle state before OAuth redirect
+- Before `signIn('google')`, puzzle/gridSize/customWords are stashed under `xword_pending_share` key
+- On mount, restore effect checks sessionStorage and repopulates state without triggering auto-generate
+- Auto-share effect fires once session resolves and restored puzzle is present
+- Manual generate and size change clear pending share state to prevent stale restores
+- All helpers wrapped in try/catch for private browsing compatibility
+- Header login button (`src/components/ui/header.tsx`) dispatches `xword:before-sign-in` custom event before `signIn('google')`
+- Page listens for event and saves puzzle with `autoShare: false` — puzzle restores but doesn't auto-share
+- `PendingShareData.autoShare` flag distinguishes Share-triggered redirects (auto-share on return) from Login-triggered redirects (restore only)
+
 ## 2026-03-02 — Skeleton Grid Loading State
 
 - Added animated skeleton grid placeholder shown while puzzles generate
