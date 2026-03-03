@@ -291,7 +291,7 @@ export default function CreatorPage() {
           <div className={`status ${statusType}`}>
             {shareUrl ? (
               <span className="share-url">
-                <span className="share-url-text">{shareUrl}</span>
+                <a className="share-url-text" href={shareUrl} target="_blank" rel="noopener noreferrer">{shareUrl}</a>
                 <button className="btn btn-secondary btn-sm" onClick={handleCopyLink}>Copy</button>
               </span>
             ) : statusMessage}
