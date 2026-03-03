@@ -6,7 +6,8 @@ import { usePuzzleGenerator } from '@/hooks/use-puzzle-generator';
 import { CrosswordGrid } from '@/components/grid/crossword-grid';
 import { SkeletonGrid } from '@/components/grid/skeleton-grid';
 import { ClueList } from '@/components/clues/clue-list';
-import type { Puzzle, Direction } from '@/engine/types';
+import type { Puzzle, Direction, Entry } from '@/engine/types';
+import { BLACK } from '@/engine/types';
 
 const SESSION_KEY = 'xword_pending_share';
 
@@ -237,6 +238,43 @@ export default function CreatorPage() {
     });
   }, []);
 
+  const handleCellEdit = useCallback((row: number, col: number, letter: string) => {
+    setPuzzle(prev => {
+      if (!prev) return prev;
+      // Update the grid
+      const newGrid = prev.grid.map((r, ri) =>
+        ri === row ? r.map((c, ci) => (ci === col ? letter : c)) : r
+      );
+      // Update answers for entries that pass through this cell
+      const newEntries: Entry[] = prev.entries.map(e => {
+        const [sr, sc] = e.start;
+        let contains = false;
+        if (e.direction === 'across') {
+          contains = row === sr && col >= sc && col < sc + e.length;
+        } else {
+          contains = col === sc && row >= sr && row < sr + e.length;
+        }
+        if (!contains) return { ...e };
+        // Rebuild the answer from the new grid
+        let answer = '';
+        for (let i = 0; i < e.length; i++) {
+          const cr = e.direction === 'across' ? sr : sr + i;
+          const cc = e.direction === 'across' ? sc + i : sc;
+          answer += (cr === row && cc === col) ? letter : newGrid[cr][cc];
+        }
+        return { ...e, answer };
+      });
+      // Invalidate clue cache for changed words
+      for (const e of newEntries) {
+        const orig = prev.entries.find(o => o.number === e.number && o.direction === e.direction);
+        if (orig && orig.answer !== e.answer) {
+          clueCache.current.delete(orig.answer);
+        }
+      }
+      return { ...prev, grid: newGrid, entries: newEntries };
+    });
+  }, []);
+
   const handleClueRefresh = useCallback(async (number: number, direction: Direction) => {
     if (!puzzle) return;
     const entry = puzzle.entries.find(e => e.number === number && e.direction === direction);
@@ -413,7 +451,7 @@ export default function CreatorPage() {
             <h3>
               Preview <span className="text-hint">Click a letter to edit</span>
             </h3>
-            <CrosswordGrid grid={puzzle.grid} entries={puzzle.entries} gridSize={puzzle.size} />
+            <CrosswordGrid grid={puzzle.grid} entries={puzzle.entries} gridSize={puzzle.size} onCellEdit={handleCellEdit} />
           </div>
           <div className="crossword-card-clues">
             <h3>Clues</h3>

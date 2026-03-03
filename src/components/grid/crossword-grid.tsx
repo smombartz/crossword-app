@@ -1,6 +1,6 @@
 'use client';
 
-import { memo, useRef } from 'react';
+import { memo, useState, useRef, useCallback, useEffect } from 'react';
 import { BLACK } from '@/engine/types';
 import type { Entry } from '@/engine/types';
 
@@ -9,8 +9,11 @@ interface CellProps {
   isBlack: boolean;
   isSelected: boolean;
   isHighlighted: boolean;
+  isEditing: boolean;
+  isEditable: boolean;
   number: number | null;
   onClick?: () => void;
+  onEditCommit?: (letter: string) => void;
 }
 
 const Cell = memo(function Cell({
@@ -18,14 +21,41 @@ const Cell = memo(function Cell({
   isBlack,
   isSelected,
   isHighlighted,
+  isEditing,
+  isEditable,
   number,
   onClick,
+  onEditCommit,
 }: CellProps) {
+  const editRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (isEditing && editRef.current) {
+      editRef.current.focus();
+      editRef.current.select();
+    }
+  }, [isEditing]);
+
+  const handleBlur = () => {
+    if (!editRef.current) return;
+    const val = editRef.current.value.toUpperCase().replace(/[^A-Z]/g, '');
+    onEditCommit?.(val.length === 1 ? val : letter);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      editRef.current?.blur();
+    } else if (e.key === 'Escape') {
+      onEditCommit?.(letter);
+    }
+  };
+
   const classes = [
     'grid-cell',
     isBlack && 'black',
     isSelected && 'active',
     isHighlighted && !isSelected && 'highlight',
+    isEditable && !isBlack && 'word-edit-cell',
   ]
     .filter(Boolean)
     .join(' ');
@@ -33,7 +63,18 @@ const Cell = memo(function Cell({
   return (
     <div className={classes} onClick={isBlack ? undefined : onClick}>
       {number && <span className="cell-number">{number}</span>}
-      {!isBlack && letter}
+      {isEditing ? (
+        <input
+          ref={editRef}
+          type="text"
+          maxLength={1}
+          defaultValue={letter}
+          onBlur={handleBlur}
+          onKeyDown={handleKeyDown}
+        />
+      ) : (
+        !isBlack && letter
+      )}
     </div>
   );
 });
@@ -50,6 +91,8 @@ interface CrosswordGridProps {
   onKeyDown?: (e: React.KeyboardEvent) => void;
   /** Grid size (e.g. 7 or 9) — used for size-specific styling. */
   gridSize?: number;
+  /** Callback for editing a cell letter in creator mode. */
+  onCellEdit?: (row: number, col: number, letter: string) => void;
 }
 
 export function CrosswordGrid({
@@ -61,8 +104,27 @@ export function CrosswordGrid({
   playerGrid,
   onKeyDown,
   gridSize,
+  onCellEdit,
 }: CrosswordGridProps) {
   const inputRef = useRef<HTMLInputElement>(null);
+  const [editingCell, setEditingCell] = useState<string | null>(null);
+
+  const handleCellClick = (r: number, c: number): void => {
+    onCellClick?.(r, c);
+    if (onCellEdit) {
+      setEditingCell(`${r},${c}`);
+    }
+    if (playerGrid) {
+      inputRef.current?.focus();
+    }
+  };
+
+  const handleEditCommit = useCallback((r: number, c: number, letter: string) => {
+    setEditingCell(null);
+    if (letter !== grid[r][c]) {
+      onCellEdit?.(r, c, letter);
+    }
+  }, [grid, onCellEdit]);
 
   // Build a map of cell numbers from entries
   const numberMap = new Map<string, number>();
@@ -72,13 +134,6 @@ export function CrosswordGrid({
       numberMap.set(key, entry.number);
     }
   }
-
-  const handleCellClick = (r: number, c: number): void => {
-    onCellClick?.(r, c);
-    if (playerGrid) {
-      inputRef.current?.focus();
-    }
-  };
 
   return (
     <div
@@ -103,10 +158,13 @@ export function CrosswordGrid({
                 isBlack={isBlack}
                 isSelected={activeCell?.row === r && activeCell?.col === c}
                 isHighlighted={highlightedCells?.has(key) ?? false}
+                isEditing={editingCell === key}
+                isEditable={!!onCellEdit}
                 number={numberMap.get(key) ?? null}
                 onClick={
-                  onCellClick ? () => handleCellClick(r, c) : undefined
+                  onCellClick || onCellEdit ? () => handleCellClick(r, c) : undefined
                 }
+                onEditCommit={onCellEdit ? (letter) => handleEditCommit(r, c, letter) : undefined}
               />
             );
           })}

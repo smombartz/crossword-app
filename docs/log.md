@@ -1,5 +1,15 @@
 # Change Log
 
+## 2026-03-02 — Editable grid cells in creator view
+
+- Click any white cell in the grid to edit its letter inline (input appears inside the cell)
+- On blur or Enter, the letter commits; on Escape, the edit cancels
+- Editing a cell updates the `answer` field of all entries passing through that cell
+- Clue cache is invalidated for any word whose answer changed
+- Added `word-edit-cell` CSS class: pointer cursor + yellow hover (#ffda00)
+- Grid cell input styles already existed in crossword-styles.css (outline, uppercase)
+- New `onCellEdit` prop on `CrosswordGrid` for creator mode; player mode unaffected
+
 ## 2026-03-02 — Fix localhost share URLs in production
 
 - Changed `getShareUrl` in `src/lib/share.ts` to accept an `origin` parameter instead of reading `NEXT_PUBLIC_BASE_URL` env var

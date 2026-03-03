@@ -242,6 +242,8 @@ input[type="password"] {
 }
 
 /* Interactive grid states */
+.grid-cell.word-edit-cell { cursor: pointer; }
+.grid-cell.word-edit-cell:hover { background: #ffda00; }
 .grid-cell.highlight { background: #a7d8ff; }
 .grid-cell.active { background: #ffda00; }
 .grid-cell input {
