@@ -1,7 +1,7 @@
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { generateCrosswordClue } from '@/lib/gemini';
-import { saveGeneratedClue } from '@/lib/clue-store';
+import { saveWordClue } from '@/lib/clue-store';
 
 export async function POST(request: Request) {
   const session = await getServerSession(authOptions);
@@ -23,7 +23,7 @@ export async function POST(request: Request) {
 
   try {
     const clue = await generateCrosswordClue(word, body.existingClues ?? []);
-    saveGeneratedClue(word, clue);
+    saveWordClue(word, clue, 'gemini-2.5-flash-lite');
     return Response.json({ clue });
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Failed to generate clue';

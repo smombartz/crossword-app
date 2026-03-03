@@ -5,6 +5,7 @@ import { getSupabaseServer } from '@/lib/db';
 import { generateShareSlug, generatePuzzleId, getShareUrl } from '@/lib/share';
 import { obfuscateSolution } from '@/engine/solution';
 import { BLACK } from '@/engine/types';
+import { saveWordClue } from '@/lib/clue-store';
 
 export async function POST(request: Request) {
   const session = await getServerSession(authOptions);
@@ -49,6 +50,13 @@ export async function POST(request: Request) {
 
     if (error) {
       return Response.json({ error: 'Failed to save puzzle' }, { status: 500 });
+    }
+
+    // Best-effort: save all word+clue pairs back to the wordlist
+    for (const entry of body.entries as { answer?: string; clue?: string }[]) {
+      if (entry.answer && entry.clue) {
+        saveWordClue(entry.answer, entry.clue, 'user-share');
+      }
     }
 
     return Response.json({
