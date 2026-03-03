@@ -1,5 +1,11 @@
 # Change Log
 
+## 2026-03-02 — Fix localhost share URLs in production
+
+- Changed `getShareUrl` in `src/lib/share.ts` to accept an `origin` parameter instead of reading `NEXT_PUBLIC_BASE_URL` env var
+- Derive origin from request headers (`x-forwarded-host`/`host` + `x-forwarded-proto`) in `src/app/api/puzzles/route.ts`
+- Fixes shared puzzle URLs showing `http://localhost:3000/play/...` on Vercel instead of the actual production URL
+
 ## 2026-03-02 — Preserve Puzzle Across OAuth Redirect
 
 - Added `sessionStorage` helpers (`savePendingShare`, `loadPendingShare`, `clearPendingShare`) to persist puzzle state before OAuth redirect

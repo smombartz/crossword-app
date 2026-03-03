@@ -1,4 +1,5 @@
 import { getServerSession } from 'next-auth';
+import { headers } from 'next/headers';
 import { authOptions } from '@/lib/auth';
 import { getSupabaseServer } from '@/lib/db';
 import { generateShareSlug, generatePuzzleId, getShareUrl } from '@/lib/share';
@@ -19,6 +20,11 @@ export async function POST(request: Request) {
   }
 
   try {
+    const headersList = await headers();
+    const host = headersList.get('x-forwarded-host') ?? headersList.get('host') ?? 'localhost:3000';
+    const proto = headersList.get('x-forwarded-proto') ?? 'https';
+    const origin = `${proto}://${host}`;
+
     const body = await request.json();
     const supabase = getSupabaseServer();
 
@@ -48,7 +54,7 @@ export async function POST(request: Request) {
     return Response.json({
       id: puzzleId,
       shareSlug,
-      shareUrl: getShareUrl(shareSlug),
+      shareUrl: getShareUrl(shareSlug, origin),
     });
   } catch {
     return Response.json({ error: 'Invalid request' }, { status: 400 });
