@@ -120,7 +120,7 @@ a:active { color: #255980; }
 .btn-primary:hover { background: #333; }
 .btn-primary:disabled { background: #ccc; color: #888; cursor: not-allowed; }
 
-.btn-secondary { color: #121212; border: 1px solid #121212; }
+.btn-secondary { background-color: #fff; color: #121212; border: 1px solid #121212; }
 .btn-secondary:hover { background: #f0f0f0; }
 .btn-secondary:disabled { background: #fff; color: #888; border-color: #ccc; cursor: not-allowed; }
 
@@ -135,10 +135,9 @@ a:active { color: #255980; }
 }
 
 /* Button group (segmented control) */
-.btn-group { display: inline-flex; border-radius: 4px; overflow: hidden; }
-.btn-group .btn { border-radius: 0; padding: 8px 16px; font-size: 0.8rem; }
-.btn-group .btn + .btn { border-left: 1px solid #fff; }
-
+.btn-group { display: inline-flex; border-radius: 4px; overflow: hidden; border: 1px solid #000; }
+.btn-group .btn { border-radius: 0; padding: 8px 16px; font-size: 0.8rem; border-width: 0px 1px 0px 0px;}
+.btn-group .btn:last-child { border: 0px;}
 /* ============================================================
    Form Controls
    ============================================================ */
