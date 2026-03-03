@@ -140,7 +140,7 @@ const DEFAULT_PATTERN_ATTEMPTS = 20;
  * - Every white cell has horizontal AND vertical span >= minSpan (default 3)
  * - Black cell density between minDensity and maxDensity (defaults 18-28%)
  *
- * @param size - Grid dimension (e.g. 13 for a 13x13 grid)
+ * @param size - Grid dimension (e.g. 9 for a 9x9 grid)
  * @param maxAttempts - Maximum number of full retries (default 20)
  * @param options - Optional density and span overrides
  * @returns A 2D string array where cells are either BLACK or '' (white)

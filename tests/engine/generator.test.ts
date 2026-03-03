@@ -104,7 +104,7 @@ describe('generatePuzzle', () => {
     expect(() => generatePuzzle(wl, { maxAttempts: 2 })).toThrow('Failed to generate');
   });
 
-  it('uses default size of 13 when no options given', () => {
+  it('uses default size of 9 when no options given', () => {
     const wl = loadWordList({});
     try {
       generatePuzzle(wl, { maxAttempts: 1 });

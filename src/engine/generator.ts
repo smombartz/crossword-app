@@ -16,7 +16,7 @@ import { getEntries } from './numbering';
  * @throws Error if no valid puzzle could be generated within maxAttempts
  */
 export function generatePuzzle(wordList: WordList, options?: GenerateOptions): Puzzle {
-  const size = options?.size ?? 13;
+  const size = options?.size ?? 9;
   const maxAttempts = options?.maxAttempts ?? 50;
 
   for (let attempt = 0; attempt < maxAttempts; attempt++) {

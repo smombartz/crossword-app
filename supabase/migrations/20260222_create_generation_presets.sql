@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS generation_presets (
 INSERT INTO generation_presets (grid_size, min_density, max_density, min_span, max_candidates, pattern_attempts, max_attempts)
 VALUES
   (7,  0.18, 0.28, 3, 50, 20, 50),
-  (13, 0.18, 0.28, 3, 50, 20, 50)
+  (9, 0.18, 0.28, 3, 50, 20, 50)
 ON CONFLICT (grid_size) DO NOTHING;
 
 -- RLS: public read, admin-only write

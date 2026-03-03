@@ -33,7 +33,7 @@ export interface PlayerPuzzle {
 }
 
 export interface GenerateOptions {
-  readonly size?: number;            // default 13
+  readonly size?: number;            // default 9
   readonly seed?: string;            // for reproducibility
   readonly maxAttempts?: number;     // outer generation retry budget (default 50)
   readonly minDensity?: number;      // min black cell ratio (default 0.18)

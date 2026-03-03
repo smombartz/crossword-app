@@ -16,13 +16,13 @@ export default function CreatorPage() {
   const [error, setError] = useState<string | null>(null);
   const [shareUrl, setShareUrl] = useState<string | null>(null);
   const [sharing, setSharing] = useState(false);
-  const [gridSize, setGridSize] = useState<5 | 7 | 13>(5);
+  const [gridSize, setGridSize] = useState<5 | 7 | 9>(5);
   const [customWords, setCustomWords] = useState<string[]>(['', '', '']);
   const [wordErrors, setWordErrors] = useState<(string | null)[]>([null, null, null]);
   const clueCache = useRef<Map<string, string[]>>(new Map());
   const [aiGeneratingKey, setAiGeneratingKey] = useState<string | null>(null);
 
-  const handleSizeChange = (size: 5 | 7 | 13) => {
+  const handleSizeChange = (size: 5 | 7 | 9) => {
     setGridSize(size);
     setPuzzle(null);
     setShareUrl(null);
@@ -259,11 +259,11 @@ export default function CreatorPage() {
             7×7
           </button>
           <button
-            className={`btn ${gridSize === 13 ? 'btn-primary' : 'btn-secondary'}`}
-            onClick={() => handleSizeChange(13)}
+            className={`btn ${gridSize === 9 ? 'btn-primary' : 'btn-secondary'}`}
+            onClick={() => handleSizeChange(9)}
             disabled={generating}
           >
-            13×13
+            9×9
           </button>
         </div>
 

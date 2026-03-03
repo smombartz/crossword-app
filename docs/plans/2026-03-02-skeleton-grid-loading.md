@@ -213,7 +213,7 @@ Run: `pnpm dev`
 
 1. Page loads → skeleton card appears (5×5 grid + Across/Down placeholder inputs) → real puzzle replaces it
 2. Click 7×7 → skeleton card appears (7×7 grid) with same clue placeholder layout → real puzzle replaces it
-3. Click 13×13 → skeleton card appears (13×13 grid) → real puzzle replaces it
+3. Click 9×9 → skeleton card appears (9×9 grid) → real puzzle replaces it
 4. Click "Generate Puzzle" while already on a size → skeleton card replaces the real card → new puzzle appears
 5. Black squares fade in and out at different positions across the skeleton grid
 6. Card border, "Preview" heading, "Clues" heading, "Across"/"Down" headings all match the completed state
@@ -242,7 +242,7 @@ git commit -m "feat: show skeleton loading card during puzzle generation"
 - Added animated skeleton grid placeholder shown while puzzles generate
 - Empty cells with black squares that randomly fade in/out at staggered intervals
 - Skeleton card mirrors full completed layout: card border, Preview heading, grid, Clues heading with Across/Down sections and 3 placeholder input rows each
-- Skeleton matches the selected grid size (5×5, 7×7, 13×13) using same cell dimensions
+- Skeleton matches the selected grid size (5×5, 7×7, 9×9) using same cell dimensions
 - Replaces blank page gap between clicking a size and puzzle appearing
 ```
 

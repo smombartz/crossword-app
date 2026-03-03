@@ -62,7 +62,7 @@ self.onmessage = async (e: MessageEvent) => {
     try {
       if (!wordList) throw new Error('Word list not loaded');
       const options: GenerateOptions | undefined = payload?.options;
-      const size = options?.size ?? 13;
+      const size = options?.size ?? 9;
       const preset = presets.get(size);
 
       const mergedOptions: GenerateOptions = {

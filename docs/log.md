@@ -5,7 +5,7 @@
 - Added animated skeleton grid placeholder shown while puzzles generate
 - Empty cells with black squares that randomly fade in/out at staggered intervals
 - Skeleton card mirrors full completed layout: card border, Preview heading, grid, Clues heading with Across/Down sections and 3 placeholder input rows each
-- Skeleton matches the selected grid size (5x5, 7x7, 13x13) using same cell dimensions
+- Skeleton matches the selected grid size (5x5, 7x7, 9x9) using same cell dimensions
 - Replaces blank page gap between clicking a size and puzzle appearing
 - Auto-generate puzzle on grid size change (no more empty page after clicking a size button)
 

@@ -147,9 +147,9 @@ describe('validateGrid', () => {
     expect(result.errors.length).toBeGreaterThanOrEqual(2);
   });
 
-  // ── 9. Larger 13×13 valid grid ────────────────────────────────────────
-  it('accepts a valid 13×13 all-white grid', () => {
-    const grid = makeGrid(13, 'X');
+  // ── 9. Larger 9×9 valid grid ──────────────────────────────────────────
+  it('accepts a valid 9×9 all-white grid', () => {
+    const grid = makeGrid(9, 'X');
     const result = validateGrid(grid);
     expect(result.valid).toBe(true);
     expect(result.errors).toEqual([]);

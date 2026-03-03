@@ -1,6 +1,6 @@
 # Crossword App
 
-A shareable crossword puzzle web app. Generate 13x13 crossword puzzles in your browser, share them via unique URLs, and solve puzzles others have created.
+A shareable crossword puzzle web app. Generate 9x9 crossword puzzles in your browser, share them via unique URLs, and solve puzzles others have created.
 
 ## Tech Stack
 

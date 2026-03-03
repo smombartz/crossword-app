@@ -4,14 +4,14 @@ import { validateGrid } from '@/engine/validator';
 import { BLACK } from '@/engine/types';
 
 describe('generatePattern', () => {
-  it('produces a 13x13 grid', () => {
-    const pattern = generatePattern(13);
-    expect(pattern.length).toBe(13);
-    pattern.forEach(row => expect(row.length).toBe(13));
+  it('produces a 9x9 grid', () => {
+    const pattern = generatePattern(9);
+    expect(pattern.length).toBe(9);
+    pattern.forEach(row => expect(row.length).toBe(9));
   });
 
   it('contains only BLACK and empty string cells', () => {
-    const pattern = generatePattern(13);
+    const pattern = generatePattern(9);
     pattern.forEach(row =>
       row.forEach(cell => expect([BLACK, '']).toContain(cell))
     );
@@ -19,7 +19,7 @@ describe('generatePattern', () => {
 
   it('passes validateGrid', () => {
     for (let i = 0; i < 3; i++) {
-      const pattern = generatePattern(13);
+      const pattern = generatePattern(9);
       const filled = pattern.map(row => row.map(cell => cell === BLACK ? BLACK : 'A'));
       const result = validateGrid(filled);
       expect(result.valid).toBe(true);
@@ -27,10 +27,10 @@ describe('generatePattern', () => {
   });
 
   it('has reasonable black cell count (12-40% of grid)', () => {
-    const pattern = generatePattern(13);
+    const pattern = generatePattern(9);
     let blackCount = 0;
     pattern.forEach(row => row.forEach(cell => { if (cell === BLACK) blackCount++; }));
-    const ratio = blackCount / (13 * 13);
+    const ratio = blackCount / (9 * 9);
     expect(ratio).toBeGreaterThan(0.12);
     expect(ratio).toBeLessThan(0.40);
   });

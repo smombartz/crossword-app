@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-A shareable crossword puzzle web app. Users generate 13×13 crossword puzzles client-side, optionally share them via unique URLs (requires Google sign-in), and others solve them in a browser-based player view with confetti on completion.
+A shareable crossword puzzle web app. Users generate 9×9 crossword puzzles client-side, optionally share them via unique URLs (requires Google sign-in), and others solve them in a browser-based player view with confetti on completion.
 
 **Key architectural principle:** The crossword engine (generation, validation, grid logic) is a standalone module with zero UI or framework dependencies. It runs in a Web Worker. The app shell consumes it through a typed API boundary.
 

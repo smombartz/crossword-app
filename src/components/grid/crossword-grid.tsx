@@ -48,7 +48,7 @@ interface CrosswordGridProps {
   playerGrid?: readonly (readonly string[])[];
   /** Keyboard event handler for interactive (player) mode. */
   onKeyDown?: (e: React.KeyboardEvent) => void;
-  /** Grid size (e.g. 7 or 13) — used for size-specific styling. */
+  /** Grid size (e.g. 7 or 9) — used for size-specific styling. */
   gridSize?: number;
 }
 
