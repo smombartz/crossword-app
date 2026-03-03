@@ -138,28 +138,29 @@ export function PlayerClient({ puzzle }: PlayerClientProps) {
       {/* Active clue bar */}
       <ClueBar activeEntry={activeEntry} />
 
-      {/* Interactive crossword grid */}
-      <div className="player-grid">
-        <CrosswordGrid
-          grid={baseGrid}
-          entries={puzzle.entries as unknown as readonly Entry[]}
-          activeCell={solved ? null : state.cursor}
-          highlightedCells={solved ? undefined : highlightedCells}
-          onCellClick={handleCellClick}
-          playerGrid={state.playerGrid}
-          onKeyDown={handleKeyDown}
-          gridSize={puzzle.size}
-        />
-      </div>
+      {/* Grid + Clues side by side (stacks on mobile) */}
+      <div className="player-body">
+        <div className="player-grid">
+          <CrosswordGrid
+            grid={baseGrid}
+            entries={puzzle.entries as unknown as readonly Entry[]}
+            activeCell={solved ? null : state.cursor}
+            highlightedCells={solved ? undefined : highlightedCells}
+            onCellClick={handleCellClick}
+            playerGrid={state.playerGrid}
+            onKeyDown={handleKeyDown}
+            gridSize={puzzle.size}
+          />
+        </div>
 
-      {/* Clue list */}
-      <div className="player-clues">
-        <ClueList
-          entries={puzzle.entries}
-          activeNumber={activeEntry?.number ?? null}
-          activeDirection={activeEntry?.direction ?? null}
-          onClueClick={handleClueClick}
-        />
+        <div className="player-clues">
+          <ClueList
+            entries={puzzle.entries}
+            activeNumber={activeEntry?.number ?? null}
+            activeDirection={activeEntry?.direction ?? null}
+            onClueClick={handleClueClick}
+          />
+        </div>
       </div>
 
       {/* Completion overlay with confetti */}
