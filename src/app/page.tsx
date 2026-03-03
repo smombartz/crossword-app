@@ -453,6 +453,13 @@ export default function CreatorPage() {
               )}
             </div>
           ))}
+          <button
+            className="btn btn-primary"
+            onClick={handleGenerate}
+            disabled={!ready || generating}
+          >
+            {generating ? 'Generating...' : 'Generate Puzzle'}
+          </button>
         </div>
       </div>
     </div>
