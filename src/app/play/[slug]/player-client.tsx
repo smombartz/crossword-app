@@ -128,7 +128,7 @@ export function PlayerClient({ puzzle }: PlayerClientProps) {
       {/* Header bar: puzzle info + timer */}
       <div className="flex-between player-header">
         <div>
-          <h1>{puzzle.creatorName ? `${puzzle.creatorName}'s Crossword` : 'Crossword'}</h1>
+          
         </div>
         <div className="text-body countdown timer">
           {timer.formatted}

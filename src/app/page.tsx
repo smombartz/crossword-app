@@ -23,6 +23,10 @@ export default function CreatorPage() {
   const [aiGeneratingKey, setAiGeneratingKey] = useState<string | null>(null);
 
   const handleSizeChange = (size: 5 | 7 | 9) => {
+    if (size === gridSize) {
+      handleGenerate();
+      return;
+    }
     setGridSize(size);
     setPuzzle(null);
     setShareUrl(null);
