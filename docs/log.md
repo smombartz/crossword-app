@@ -1,5 +1,11 @@
 # Change Log
 
+## 2026-03-02 17:30 — Fix: AI clue breaks refresh cycling
+
+- Fixed `handleAiClue` in `page.tsx` to pre-populate `clueCache` from the worker via `getClues` before appending the AI clue
+- Previously, clicking sparkle before ever clicking refresh left the cache with only the AI clue, making refresh stuck on a single entry
+- Added `getClues` to the `useCallback` dependency array
+
 ## 2026-03-02 16:21 — AI Clue Generation (Gemini Flash)
 
 - Added `@google/generative-ai` dependency, moved `better-sqlite3` to production deps
