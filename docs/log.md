@@ -1,5 +1,14 @@
 # Change Log
 
+## 2026-03-02 — Skeleton Grid Loading State
+
+- Added animated skeleton grid placeholder shown while puzzles generate
+- Empty cells with black squares that randomly fade in/out at staggered intervals
+- Skeleton card mirrors full completed layout: card border, Preview heading, grid, Clues heading with Across/Down sections and 3 placeholder input rows each
+- Skeleton matches the selected grid size (5x5, 7x7, 13x13) using same cell dimensions
+- Replaces blank page gap between clicking a size and puzzle appearing
+- Auto-generate puzzle on grid size change (no more empty page after clicking a size button)
+
 ## 2026-03-02 17:30 — Fix: AI clue breaks refresh cycling
 
 - Fixed `handleAiClue` in `page.tsx` to pre-populate `clueCache` from the worker via `getClues` before appending the AI clue
