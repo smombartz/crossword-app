@@ -405,8 +405,9 @@ input[type="password"] {
 
 /* Player layout */
 .player-header { margin-bottom: 16px; }
-.player-grid { margin: 16px 0; }
-.player-clues { margin-top: 24px; }
+.player-body { display: flex; gap: 32px; align-items: flex-start; margin: 16px 0; }
+.player-grid { flex-shrink: 0; }
+.player-clues { flex: 1; min-width: 0; }
 
 /* Clue bar — active clue display */
 .clue-bar { font-size: 0.85rem; padding: 8px 0; font-weight: 500; }
@@ -476,6 +477,9 @@ input[type="password"] {
   .grid-cell { width: 42px !important; height: 42px !important; font-size: 1.1rem; }
   .grid-cell .cell-number { font-size: 0.48rem; }
   .grid-cell input { font-size: 1.1rem; }
+
+  /* Player body — stack on mobile */
+  .player-body { flex-direction: column; gap: 16px; }
 
   /* Clues — single column */
   .clue-columns { flex-direction: column; gap: 20px; }
