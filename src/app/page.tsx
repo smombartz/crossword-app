@@ -4,6 +4,7 @@ import { useState, useCallback, useEffect, useRef } from 'react';
 import { useSession, signIn } from 'next-auth/react';
 import { usePuzzleGenerator } from '@/hooks/use-puzzle-generator';
 import { CrosswordGrid } from '@/components/grid/crossword-grid';
+import { SkeletonGrid } from '@/components/grid/skeleton-grid';
 import { ClueList } from '@/components/clues/clue-list';
 import type { Puzzle, Direction } from '@/engine/types';
 
@@ -294,7 +295,37 @@ export default function CreatorPage() {
         )}
       </div>
 
-      {puzzle && (
+      {generating && (
+        <div className="card crossword-card">
+          <div className="crossword-card-grid">
+            <h3>Preview</h3>
+            <SkeletonGrid gridSize={gridSize} />
+          </div>
+          <div className="crossword-card-clues">
+            <h3>Clues</h3>
+            <div className="clue-creator">
+              <div className="clue-section">
+                <h4>Across</h4>
+                {[1, 2, 3].map(n => (
+                  <div className="clue-row" key={n}>
+                    <input className="input" disabled />
+                  </div>
+                ))}
+              </div>
+              <div className="clue-section">
+                <h4>Down</h4>
+                {[1, 2, 3].map(n => (
+                  <div className="clue-row" key={n}>
+                    <input className="input" disabled />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {puzzle && !generating && (
         <div className="card crossword-card">
           <div className="crossword-card-grid">
             <h3>
