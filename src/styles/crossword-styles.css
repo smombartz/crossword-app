@@ -3,10 +3,9 @@
    Extracted from Crossword Generator / Player
    ============================================================ */
 
-/* Fonts (Google Fonts)
-   <link rel="preconnect" href="https://fonts.googleapis.com">
-   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-   <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Libre+Franklin:wght@400;500;600;700&display=swap" rel="stylesheet">
+/* Fonts
+   Serif (New Spirit): <link rel="stylesheet" href="https://use.typekit.net/ubq6oda.css">
+   Sans (Libre Franklin): loaded via next/font/google in layout.tsx
 */
 
 /* ============================================================
@@ -27,7 +26,7 @@ body {
 
 /* Display / Headings — serif */
 h1, h2 {
-  font-family: 'Libre Baskerville', Georgia, 'Times New Roman', serif;
+  font-family: 'new-spirit', Georgia, 'Times New Roman', serif;
   font-weight: 700;
 }
 
@@ -114,17 +113,20 @@ a:active { color: #255980; }
   display: inline-block;
   text-decoration: none;
 }
-.btn:active { transform: scale(0.97); }
+.btn:active { transform: none; }
 
 .btn-primary { background: #121212; color: #fff; }
 .btn-primary:hover { background: #333; }
+.btn-primary:active { background: #000; }
 .btn-primary:disabled { background: #ccc; color: #888; cursor: not-allowed; }
 
 .btn-secondary { background-color: #fff; color: #121212; border: 1px solid #121212; }
 .btn-secondary:hover { background: #f0f0f0; }
+.btn-secondary:active { background: #e0e0e0; }
 .btn-secondary:disabled { background: #fff; color: #888; border-color: #ccc; cursor: not-allowed; }
 
 .btn-sm { padding: 5px 12px; font-size: 0.78rem; }
+.btn-fixed { min-width: 10em; }
 
 /* Toolbar — right-aligned action bar */
 .toolbar {
@@ -458,6 +460,165 @@ input[type="password"] {
 .card-actions { margin-top: 16px; }
 
 /* ============================================================
+   Word List Table
+   ============================================================ */
+.words-filters {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+.words-filters .filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.words-filters .filter-group label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #5a5a5a;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.words-filters select.input {
+  min-width: 80px;
+  cursor: pointer;
+}
+
+.words-table-wrap {
+  overflow-x: auto;
+}
+.words-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+.words-table th {
+  text-align: left;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #5a5a5a;
+  font-weight: 600;
+  padding: 8px 12px;
+  border-bottom: 2px solid #e2e2e2;
+}
+.words-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid #eee;
+  vertical-align: top;
+}
+.words-table tr:hover td {
+  background: #f7f7f7;
+}
+.words-table .word-cell {
+  font-weight: 700;
+  font-family: monospace;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+.words-table .clue-count-cell,
+.words-table .length-cell {
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.clue-expand-toggle {
+  background: none;
+  border: none;
+  color: #326891;
+  cursor: pointer;
+  font-size: 0.8rem;
+  padding: 0;
+  font-family: inherit;
+}
+.clue-expand-toggle:hover {
+  text-decoration: underline;
+}
+.clue-preview {
+  color: #5a5a5a;
+  font-size: 0.82rem;
+}
+.clue-detail-list {
+  list-style: none;
+  padding: 0;
+  margin: 4px 0 0 0;
+}
+.clue-detail-list li {
+  padding: 3px 0;
+  font-size: 0.82rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+.clue-detail-list li:last-child {
+  border-bottom: none;
+}
+.clue-source {
+  font-size: 0.72rem;
+  color: #888;
+  margin-left: 8px;
+}
+
+.add-clue-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 6px;
+  align-items: center;
+}
+.add-clue-row .input {
+  flex: 1;
+  padding: 5px 10px;
+  font-size: 0.82rem;
+}
+
+.add-word-form {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+.add-word-form .filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.add-word-form .filter-group label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #5a5a5a;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.add-word-form .word-input {
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  min-width: 140px;
+}
+.add-word-form .clue-input {
+  min-width: 280px;
+  flex: 1;
+}
+
+.words-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 16px 0;
+}
+.words-pagination .page-info {
+  font-size: 0.82rem;
+  color: #5a5a5a;
+  font-variant-numeric: tabular-nums;
+}
+
+.words-empty {
+  padding: 40px 20px;
+  text-align: center;
+  color: #5a5a5a;
+}
+
+/* ============================================================
    Responsive — Mobile (max-width: 640px)
    ============================================================ */
 @media (max-width: 640px) {
@@ -497,4 +658,12 @@ input[type="password"] {
   /* Settings */
   .settings-row { flex-direction: column; gap: 10px; }
   .setting-input { max-width: 100%; }
+
+  /* Word list */
+  .words-filters { flex-direction: column; }
+  .words-filters .input { width: 100%; min-width: unset; }
+  .add-word-form { flex-direction: column; }
+  .add-word-form .input { width: 100%; min-width: unset; }
+  .words-table { font-size: 0.8rem; }
+  .words-table th, .words-table td { padding: 6px 8px; }
 }

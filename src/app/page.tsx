@@ -388,7 +388,7 @@ export default function CreatorPage() {
         </div>
 
         <button
-          className="btn btn-primary"
+          className="btn btn-primary btn-fixed"
           onClick={handleGenerate}
           disabled={!ready || generating}
         >
@@ -492,7 +492,7 @@ export default function CreatorPage() {
             </div>
           ))}
           <button
-            className="btn btn-primary"
+            className="btn btn-primary btn-fixed"
             onClick={handleGenerate}
             disabled={!ready || generating}
           >
