@@ -53,11 +53,10 @@ export async function POST(request: Request) {
     }
 
     // Best-effort: save all word+clue pairs back to the wordlist
-    for (const entry of body.entries as { answer?: string; clue?: string }[]) {
-      if (entry.answer && entry.clue) {
-        saveWordClue(entry.answer, entry.clue, 'user-share');
-      }
-    }
+    const savePromises = (body.entries as { answer?: string; clue?: string }[])
+      .filter(entry => entry.answer && entry.clue)
+      .map(entry => saveWordClue(entry.answer!, entry.clue!, 'user-share'));
+    await Promise.allSettled(savePromises);
 
     return Response.json({
       id: puzzleId,

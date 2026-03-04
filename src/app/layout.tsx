@@ -1,16 +1,8 @@
 import type { Metadata } from 'next';
-import { Libre_Baskerville, Libre_Franklin } from 'next/font/google';
+import { Libre_Franklin } from 'next/font/google';
 import { Header } from '@/components/ui/header';
 import { Providers } from '@/components/ui/providers';
 import '@/styles/crossword-styles.css';
-
-const libreBaskerville = Libre_Baskerville({
-  subsets: ['latin'],
-  weight: ['400', '700'],
-  style: ['normal', 'italic'],
-  variable: '--font-baskerville',
-  display: 'swap',
-});
 
 const libreFranklin = Libre_Franklin({
   subsets: ['latin'],
@@ -30,7 +22,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${libreBaskerville.variable} ${libreFranklin.variable}`}>
+    <html lang="en" className={libreFranklin.variable}>
+      <head>
+        <link rel="stylesheet" href="https://use.typekit.net/ubq6oda.css" />
+      </head>
       <body>
         <Providers>
           <div className="container">

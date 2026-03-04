@@ -19,6 +19,7 @@ export function Header() {
         <p className="text-body text-muted">Create Custom Crosswords</p>
       </div>
       <div className="header-actions">
+        <Link href="/words" className="btn btn-secondary btn-sm">Words</Link>
         {status === 'loading' ? null : isLoggedIn ? (
           <>
             <span className="text-small text-muted">{session.user?.email}</span>

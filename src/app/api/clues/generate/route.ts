@@ -23,7 +23,7 @@ export async function POST(request: Request) {
 
   try {
     const clue = await generateCrosswordClue(word, body.existingClues ?? []);
-    saveWordClue(word, clue, 'gemini-2.5-flash-lite');
+    await saveWordClue(word, clue, 'gemini-2.5-flash-lite');
     return Response.json({ clue });
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Failed to generate clue';

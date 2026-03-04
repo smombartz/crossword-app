@@ -1,20 +1,30 @@
 import Database from 'better-sqlite3';
 import { appendFileSync, readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
+import { getSupabaseServer } from './db';
 
 const DEFAULT_DB_PATH = join(process.cwd(), 'wordlist.db');
 const DEFAULT_JSONL_PATH = join(process.cwd(), 'llm-clues.jsonl');
 const DEFAULT_JSON_PATH = join(process.cwd(), 'public', 'wordlist.json');
 
-export function saveWordClue(
+export async function saveWordClue(
   word: string,
   clue: string,
   source: string = 'gemini-2.5-flash-lite',
   dbPath: string = DEFAULT_DB_PATH,
   jsonlPath: string = DEFAULT_JSONL_PATH,
   jsonPath: string = DEFAULT_JSON_PATH,
-): void {
+): Promise<void> {
   const upper = word.toUpperCase();
+
+  // 0. Persist to Supabase (primary store — works on Vercel)
+  try {
+    const supabase = getSupabaseServer();
+    await supabase.from('word_clues').upsert(
+      { word: upper, clue, source },
+      { onConflict: 'word,clue', ignoreDuplicates: true }
+    );
+  } catch { /* best-effort */ }
 
   // 1. Append to JSONL backup (always, even if other writes fail)
   try {

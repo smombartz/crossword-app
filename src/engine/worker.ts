@@ -17,6 +17,33 @@ interface PresetRow {
   max_attempts: number;
 }
 
+type RawWordListData = Record<string, [string, string[]][]>;
+
+interface DynamicClue {
+  word: string;
+  clue: string;
+}
+
+function mergeDynamicClues(data: RawWordListData, dynamicClues: DynamicClue[]): void {
+  for (const { word, clue } of dynamicClues) {
+    const upper = word.toUpperCase();
+    const lenKey = String(upper.length);
+    let bucket = data[lenKey];
+    if (!bucket) {
+      bucket = [];
+      data[lenKey] = bucket;
+    }
+    const existing = bucket.find(([w]) => w === upper);
+    if (existing) {
+      if (!existing[1].includes(clue)) {
+        existing[1].push(clue);
+      }
+    } else {
+      bucket.push([upper, [clue]]);
+    }
+  }
+}
+
 let wordList: WordList | null = null;
 let presets: Map<number, PresetRow> = new Map();
 
@@ -25,11 +52,20 @@ self.onmessage = async (e: MessageEvent) => {
 
   if (type === 'init') {
     try {
-      const [wordlistRes, presetsRes] = await Promise.all([
+      const [wordlistRes, presetsRes, wordCluesRes] = await Promise.all([
         fetch('/wordlist.json'),
         fetch('/api/presets'),
+        fetch('/api/word-clues'),
       ]);
-      const data = await wordlistRes.json();
+      const data: RawWordListData = await wordlistRes.json();
+
+      if (wordCluesRes.ok) {
+        try {
+          const dynamicClues: DynamicClue[] = await wordCluesRes.json();
+          mergeDynamicClues(data, dynamicClues);
+        } catch { /* skip merge on parse error */ }
+      }
+
       wordList = loadWordList(data);
 
       if (presetsRes.ok) {

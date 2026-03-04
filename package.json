@@ -12,7 +12,8 @@
     "test:e2e": "playwright test",
     "typecheck": "tsc --noEmit",
     "build:wordlist": "tsx scripts/build-wordlist.ts",
-    "import:clues": "tsx scripts/import-clues.ts"
+    "import:clues": "tsx scripts/import-clues.ts",
+    "import:wordlist-supabase": "tsx --env-file=.env.local scripts/import-wordlist-to-supabase.ts"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",

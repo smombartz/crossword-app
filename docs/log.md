@@ -1,5 +1,32 @@
 # Change Log
 
+## 2026-03-04 — Replace Serif Font: Libre Baskerville → New Spirit
+
+- Replaced Libre Baskerville (Google Fonts) with New Spirit (Adobe Typekit) for h1/h2 headings
+- Loads via `https://use.typekit.net/ubq6oda.css` in layout.tsx `<head>`
+- Updated CSS font-family to `'new-spirit'` in crossword-styles.css
+- Updated styleguide.md with new font references and loading instructions
+
+## 2026-03-04 11:02 — Word List Management Page
+
+- Created Postgres RPC functions `search_words` and `count_words` for server-side grouped search with filtering and pagination
+- Created bulk import script (`scripts/import-wordlist-to-supabase.ts`) to load all of wordlist.json (~417k words, ~1.25M clues) into Supabase `word_clues` table
+- Added `GET /api/words` route using Supabase RPC for search, length filter, clue count filter, and pagination
+- Added `POST /api/words` route (auth-protected) for user-contributed words and clues, reusing `saveWordClue()`
+- Created `/words` page with search (debounced, alpha-only), length dropdown, min/max clues filters, expandable clue details, inline add clue, add word form, and pagination
+- Added CSS styles for word list table, filters, forms, and pagination (desktop + mobile responsive)
+- Added "Words" navigation link to header (visible to all users)
+
+## 2026-03-02 — Persist word+clue pairs to Supabase
+
+- Created `word_clues` Supabase table with `(word, clue)` unique constraint, word index, and public-read RLS
+- Made `saveWordClue()` async; adds Supabase upsert as primary store (step 0) before local file writes
+- Updated `POST /api/puzzles` to use `Promise.allSettled` for async save calls
+- Updated `POST /api/clues/generate` to `await saveWordClue`
+- Created `GET /api/word-clues` route returning `{ word, clue }[]` from Supabase with 5-min cache
+- Updated Web Worker init to fetch `/api/word-clues` in parallel, merge dynamic clues into wordlist data before `loadWordList()`
+- Fixes: AI-generated and user-edited clues no longer lost on Vercel (read-only filesystem)
+
 ## 2026-03-02 — Editable grid cells in creator view
 
 - Click any white cell in the grid to edit its letter inline (input appears inside the cell)

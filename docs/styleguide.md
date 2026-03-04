@@ -6,17 +6,17 @@ A clean, newspaper-inspired design system built for crossword puzzles and editor
 
 ## Fonts
 
-**Google Fonts import:**
+**Font loading:**
 
 ```html
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Libre+Franklin:wght@400;500;600;700&display=swap" rel="stylesheet">
+<!-- Serif (New Spirit via Adobe Typekit) -->
+<link rel="stylesheet" href="https://use.typekit.net/ubq6oda.css">
+<!-- Sans (Libre Franklin via next/font/google in layout.tsx) -->
 ```
 
 | Role | Font | Weights | Usage |
 |------|------|---------|-------|
-| Display / Headings | Libre Baskerville | 400, 700, 400 italic | Page titles, day headings, completion messages |
+| Display / Headings | New Spirit | 400, 600, 700 | Page titles, day headings, completion messages |
 | Body / UI | Libre Franklin | 400, 500, 600, 700 | All body text, buttons, labels, clues |
 | Code / Answers | System monospace | — | API keys, word previews in clue editor |
 
@@ -76,8 +76,8 @@ A clean, newspaper-inspired design system built for crossword puzzles and editor
 
 | Class / Element | Size | Weight | Notes |
 |-----------------|------|--------|-------|
-| `h1` | 1.6rem | 700 | Baskerville, page title |
-| `h2` | 1.1rem | 700 | Baskerville, section title |
+| `h1` | 1.6rem | 700 | New Spirit, page title |
+| `h2` | 1.1rem | 700 | New Spirit, section title |
 | `h3` / `.heading-section` | 0.75rem | 600 | Franklin, uppercase + tracking |
 | `h4` / `.heading-subsection` | 0.85rem | — | Uppercase, border-bottom divider |
 | `.text-body` | 0.85rem | 400 | Standard body |
@@ -230,12 +230,10 @@ Breakpoint: `640px`
 
 ## Usage
 
-Link the stylesheet and Google Fonts in your HTML:
+Link the stylesheet and fonts in your HTML:
 
 ```html
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Libre+Franklin:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://use.typekit.net/ubq6oda.css">
 <link rel="stylesheet" href="crossword-styles.css">
 ```
 
