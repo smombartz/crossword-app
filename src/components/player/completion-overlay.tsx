@@ -48,7 +48,7 @@ export function CompletionOverlay({ time }: CompletionOverlayProps) {
         </p>
         <div className="overlay-actions">
           <a href="/">
-            <button href="/" className="btn btn-secondary">        
+            <button className="btn btn-secondary">        
             Create Your Own
             </button>
           </a>
