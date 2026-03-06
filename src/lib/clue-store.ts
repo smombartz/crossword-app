@@ -7,21 +7,34 @@ const DEFAULT_DB_PATH = join(process.cwd(), 'wordlist.db');
 const DEFAULT_JSONL_PATH = join(process.cwd(), 'llm-clues.jsonl');
 const DEFAULT_JSON_PATH = join(process.cwd(), 'public', 'wordlist.json');
 
+interface SaveWordClueOptions {
+  createdBy?: string | null;
+  status?: 'approved' | 'pending';
+  dbPath?: string;
+  jsonlPath?: string;
+  jsonPath?: string;
+}
+
 export async function saveWordClue(
   word: string,
   clue: string,
   source: string = 'gemini-2.5-flash-lite',
-  dbPath: string = DEFAULT_DB_PATH,
-  jsonlPath: string = DEFAULT_JSONL_PATH,
-  jsonPath: string = DEFAULT_JSON_PATH,
+  options: SaveWordClueOptions = {},
 ): Promise<void> {
   const upper = word.toUpperCase();
+  const {
+    createdBy = null,
+    status = 'approved',
+    dbPath = DEFAULT_DB_PATH,
+    jsonlPath = DEFAULT_JSONL_PATH,
+    jsonPath = DEFAULT_JSON_PATH,
+  } = options;
 
   // 0. Persist to Supabase (primary store — works on Vercel)
   try {
     const supabase = getSupabaseServer();
     await supabase.from('word_clues').upsert(
-      { word: upper, clue, source },
+      { word: upper, clue, source, created_by: createdBy, status },
       { onConflict: 'word,clue', ignoreDuplicates: true }
     );
   } catch { /* best-effort */ }
