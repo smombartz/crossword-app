@@ -19,14 +19,16 @@ export function Header() {
         <p className="text-body text-muted">Create Custom Crosswords</p>
       </div>
       <div className="header-actions">
-        <Link href="/words" className="btn btn-secondary btn-sm">Words</Link>
+        {status !== 'loading' && isLoggedIn && (
+          <span className="text-small text-muted">{session.user?.email}</span>
+        )}
+        <Link href="/words" className="btn btn-secondary">Words</Link>
         {status === 'loading' ? null : isLoggedIn ? (
           <>
-            <span className="text-small text-muted">{session.user?.email}</span>
             {isAdmin && (
-              <Link href="/admin/settings" className="btn btn-secondary btn-sm">Settings</Link>
+              <Link href="/admin/settings" className="btn btn-secondary">Settings</Link>
             )}
-            <button className="btn btn-secondary btn-sm" onClick={() => signOut()}>Log out</button>
+            <button className="btn btn-secondary" onClick={() => signOut()}>Log out</button>
           </>
         ) : (
           <button className="btn btn-secondary" onClick={() => {
@@ -34,6 +36,7 @@ export function Header() {
             signIn('google');
           }}>Login</button>
         )}
+        
       </div>
     </header>
   );

@@ -1,5 +1,16 @@
 # Change Log
 
+## 2026-03-06 — Word Clue User Tracking & Admin Approval
+
+- Added `created_by` and `status` columns to `word_clues` table (migration: `20260306_word_clues_approval.sql`)
+- Updated `search_words` and `count_words` RPC functions with `p_status` filter and `id`/`status` in clue JSONB
+- Refactored `saveWordClue()` to accept `SaveWordClueOptions` with `createdBy` and `status` params
+- User-contributed words (`POST /api/words`) now start as `pending`; AI-generated and puzzle-share words auto-approve
+- `/api/word-clues` now filters to `approved` only — pending/rejected words never enter puzzle generation
+- Created `PATCH /api/admin/word-clues` endpoint for admin approve/reject (guarded by `ADMIN_EMAIL`)
+- `/words` page: status filter dropdown (admin only), pending badges on words/clues, inline approve/reject buttons
+- Success message changed from "Added" to "submitted for review"
+
 ## 2026-03-04 — Replace Serif Font: Libre Baskerville → New Spirit
 
 - Replaced Libre Baskerville (Google Fonts) with New Spirit (Adobe Typekit) for h1/h2 headings

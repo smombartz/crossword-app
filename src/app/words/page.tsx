@@ -366,7 +366,7 @@ export default function WordsPage() {
                     const hasPending = entry.clues.some(c => c.status === 'pending');
 
                     return (
-                      <tr key={entry.word}>
+                      <tr key={entry.word} className="words-row-clickable" onClick={() => toggleExpand(entry.word)}>
                         <td className="word-cell">
                           {entry.word}
                           {hasPending && <span className="clue-status-badge pending">Pending</span>}
@@ -382,15 +382,7 @@ export default function WordsPage() {
                             </span>
                           )}
                           {entry.clueCount > 1 && !isExpanded && (
-                            <>
-                              {' '}
-                              <button
-                                className="clue-expand-toggle"
-                                onClick={() => toggleExpand(entry.word)}
-                              >
-                                +{entry.clueCount - 1} more
-                              </button>
-                            </>
+                            <span className="clue-expand-toggle"> +{entry.clueCount - 1} more</span>
                           )}
                           {isExpanded && (
                             <>
@@ -406,13 +398,13 @@ export default function WordsPage() {
                                       <>
                                         <button
                                           className="btn-inline-approve"
-                                          onClick={() => handleApproval(c.id, 'approved')}
+                                          onClick={e => { e.stopPropagation(); handleApproval(c.id, 'approved'); }}
                                         >
                                           Approve
                                         </button>
                                         <button
                                           className="btn-inline-reject"
-                                          onClick={() => handleApproval(c.id, 'rejected')}
+                                          onClick={e => { e.stopPropagation(); handleApproval(c.id, 'rejected'); }}
                                         >
                                           Reject
                                         </button>
@@ -421,16 +413,10 @@ export default function WordsPage() {
                                   </li>
                                 ))}
                               </ul>
-                              <button
-                                className="clue-expand-toggle"
-                                onClick={() => toggleExpand(entry.word)}
-                              >
-                                Collapse
-                              </button>
                             </>
                           )}
                           {isAddingClue && (
-                            <div className="add-clue-row">
+                            <div className="add-clue-row" onClick={e => e.stopPropagation()}>
                               <input
                                 className="input"
                                 type="text"
@@ -462,7 +448,7 @@ export default function WordsPage() {
                         </td>
                         <td className="clue-count-cell">{entry.clueCount}</td>
                         {isLoggedIn && (
-                          <td>
+                          <td onClick={e => e.stopPropagation()}>
                             {!isAddingClue && (
                               <button
                                 className="btn btn-secondary btn-sm"
