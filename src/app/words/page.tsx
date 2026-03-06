@@ -7,6 +7,8 @@ interface ClueDetail {
   clue: string;
   source: string;
   createdAt: string;
+  status: string;
+  id: number;
 }
 
 interface WordEntry {
@@ -27,6 +29,7 @@ interface ApiResponse {
 export default function WordsPage() {
   const { data: session } = useSession();
   const isLoggedIn = !!session?.user;
+  const isAdmin = session?.user?.email === process.env.NEXT_PUBLIC_ADMIN_EMAIL;
 
   // Filters
   const [searchInput, setSearchInput] = useState('');
@@ -34,6 +37,7 @@ export default function WordsPage() {
   const [length, setLength] = useState('');
   const [minClues, setMinClues] = useState('');
   const [maxClues, setMaxClues] = useState('');
+  const [statusFilter, setStatusFilter] = useState('');
   const [page, setPage] = useState(1);
 
   // Data
@@ -71,6 +75,7 @@ export default function WordsPage() {
     if (length) params.set('length', length);
     if (minClues) params.set('minClues', minClues);
     if (maxClues) params.set('maxClues', maxClues);
+    if (statusFilter) params.set('status', statusFilter);
     params.set('page', String(page));
     params.set('limit', String(limit));
 
@@ -89,7 +94,7 @@ export default function WordsPage() {
     } finally {
       setLoading(false);
     }
-  }, [search, length, minClues, maxClues, page]);
+  }, [search, length, minClues, maxClues, statusFilter, page]);
 
   useEffect(() => {
     fetchWords();
@@ -149,7 +154,7 @@ export default function WordsPage() {
         throw new Error(data.error || 'Failed to add word');
       }
 
-      setAddStatus({ type: 'success', message: `Added "${word}" with clue` });
+      setAddStatus({ type: 'success', message: `"${word}" submitted for review` });
       setNewWord('');
       setNewClue('');
       fetchWords();
@@ -188,6 +193,24 @@ export default function WordsPage() {
       setAddStatus({ type: 'error', message: err instanceof Error ? err.message : 'Failed to add clue' });
     } finally {
       setInlineLoading(false);
+    }
+  };
+
+  // Admin approve/reject
+  const handleApproval = async (id: number, status: 'approved' | 'rejected') => {
+    try {
+      const res = await fetch('/api/admin/word-clues', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, status }),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({ error: 'Request failed' }));
+        throw new Error(data.error || 'Request failed');
+      }
+      fetchWords();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to update status');
     }
   };
 
@@ -251,6 +274,22 @@ export default function WordsPage() {
               onChange={e => handleFilterChange(setMaxClues)(e.target.value)}
             />
           </div>
+          {isAdmin && (
+            <div className="filter-group">
+              <label htmlFor="status-filter">Status</label>
+              <select
+                id="status-filter"
+                className="input"
+                value={statusFilter}
+                onChange={e => handleFilterChange(setStatusFilter)(e.target.value)}
+              >
+                <option value="">All</option>
+                <option value="approved">Approved</option>
+                <option value="pending">Pending</option>
+                <option value="rejected">Rejected</option>
+              </select>
+            </div>
+          )}
         </div>
       </div>
 
@@ -324,14 +363,23 @@ export default function WordsPage() {
                     const isExpanded = expandedWords.has(entry.word);
                     const isAddingClue = addClueWord === entry.word;
                     const firstClue = entry.clues[0];
+                    const hasPending = entry.clues.some(c => c.status === 'pending');
 
                     return (
                       <tr key={entry.word}>
-                        <td className="word-cell">{entry.word}</td>
+                        <td className="word-cell">
+                          {entry.word}
+                          {hasPending && <span className="clue-status-badge pending">Pending</span>}
+                        </td>
                         <td className="length-cell">{entry.length}</td>
                         <td>
                           {firstClue && (
-                            <span className="clue-preview">{firstClue.clue}</span>
+                            <span className="clue-preview">
+                              {firstClue.clue}
+                              {firstClue.status !== 'approved' && (
+                                <span className={`clue-status-badge ${firstClue.status}`}>{firstClue.status}</span>
+                              )}
+                            </span>
                           )}
                           {entry.clueCount > 1 && !isExpanded && (
                             <>
@@ -351,6 +399,25 @@ export default function WordsPage() {
                                   <li key={i}>
                                     {c.clue}
                                     <span className="clue-source">{c.source}</span>
+                                    {c.status !== 'approved' && (
+                                      <span className={`clue-status-badge ${c.status}`}>{c.status}</span>
+                                    )}
+                                    {isAdmin && c.status === 'pending' && (
+                                      <>
+                                        <button
+                                          className="btn-inline-approve"
+                                          onClick={() => handleApproval(c.id, 'approved')}
+                                        >
+                                          Approve
+                                        </button>
+                                        <button
+                                          className="btn-inline-reject"
+                                          onClick={() => handleApproval(c.id, 'rejected')}
+                                        >
+                                          Reject
+                                        </button>
+                                      </>
+                                    )}
                                   </li>
                                 ))}
                               </ul>

@@ -619,6 +619,40 @@ input[type="password"] {
 }
 
 /* ============================================================
+   Word Clue Approval — Badges & Inline Buttons
+   ============================================================ */
+.clue-status-badge {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 1px 6px;
+  border-radius: 3px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+.clue-status-badge.pending { background: #fff3cd; color: #856404; }
+.clue-status-badge.rejected { background: #f8d7da; color: #721c24; }
+
+.btn-inline-approve,
+.btn-inline-reject {
+  background: none;
+  border: 1px solid;
+  border-radius: 3px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 1px 8px;
+  margin-left: 6px;
+  font-family: inherit;
+}
+.btn-inline-approve { color: #1a7a2e; border-color: #1a7a2e; }
+.btn-inline-approve:hover { background: #1a7a2e; color: #fff; }
+.btn-inline-reject { color: #cc0000; border-color: #cc0000; }
+.btn-inline-reject:hover { background: #cc0000; color: #fff; }
+
+/* ============================================================
    Responsive — Mobile (max-width: 640px)
    ============================================================ */
 @media (max-width: 640px) {
