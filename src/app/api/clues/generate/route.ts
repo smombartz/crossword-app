@@ -22,8 +22,12 @@ export async function POST(request: Request) {
   }
 
   try {
+    const userId = (session.user as Record<string, unknown>).userId as string | undefined;
     const clue = await generateCrosswordClue(word, body.existingClues ?? []);
-    await saveWordClue(word, clue, 'gemini-2.5-flash-lite');
+    await saveWordClue(word, clue, 'gemini-2.5-flash-lite', {
+      createdBy: userId ?? null,
+      status: 'approved',
+    });
     return Response.json({ clue });
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Failed to generate clue';

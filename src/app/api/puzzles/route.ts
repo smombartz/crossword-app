@@ -55,7 +55,10 @@ export async function POST(request: Request) {
     // Best-effort: save all word+clue pairs back to the wordlist
     const savePromises = (body.entries as { answer?: string; clue?: string }[])
       .filter(entry => entry.answer && entry.clue)
-      .map(entry => saveWordClue(entry.answer!, entry.clue!, 'user-share'));
+      .map(entry => saveWordClue(entry.answer!, entry.clue!, 'user-share', {
+        createdBy: userId,
+        status: 'approved',
+      }));
     await Promise.allSettled(savePromises);
 
     return Response.json({
