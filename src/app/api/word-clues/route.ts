@@ -7,6 +7,7 @@ export async function GET() {
   const { data, error } = await supabase
     .from('word_clues')
     .select('word, clue')
+    .eq('status', 'approved')
     .limit(50000);
 
   if (error) {
