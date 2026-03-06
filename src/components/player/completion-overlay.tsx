@@ -10,9 +10,9 @@ interface CompletionOverlayProps {
   onDismiss?: () => void;
 }
 
-export function CompletionOverlay({ time, creatorName, shareUrl, onDismiss }: CompletionOverlayProps) {
+export function CompletionOverlay({ time }: CompletionOverlayProps) {
   useEffect(() => {
-    // Fire confetti for 3 seconds
+    // Fire confetti for 3 seconds, z-index above the overlay
     const duration = 3000;
     const end = Date.now() + duration;
 
@@ -22,12 +22,14 @@ export function CompletionOverlay({ time, creatorName, shareUrl, onDismiss }: Co
         angle: 60,
         spread: 55,
         origin: { x: 0 },
+        zIndex: 1001,
       });
       confetti({
         particleCount: 3,
         angle: 120,
         spread: 55,
         origin: { x: 1 },
+        zIndex: 1001,
       });
 
       if (Date.now() < end) {
@@ -37,15 +39,6 @@ export function CompletionOverlay({ time, creatorName, shareUrl, onDismiss }: Co
     frame();
   }, []);
 
-  const handleShareTime = async () => {
-    const text = `I solved ${creatorName}'s crossword in ${time}! ${shareUrl}`;
-    try {
-      await navigator.clipboard.writeText(text);
-    } catch {
-      // Fallback — select text
-    }
-  };
-
   return (
     <div className="overlay">
       <div className="card overlay-card text-center">
@@ -54,11 +47,10 @@ export function CompletionOverlay({ time, creatorName, shareUrl, onDismiss }: Co
           You solved it in <strong>{time}</strong>
         </p>
         <div className="overlay-actions">
-          <button className="btn btn-primary" onClick={handleShareTime}>
-            Share Your Time
-          </button>
-          <a href="/" className="btn btn-secondary">
-            Play Another
+          <a href="/">
+            <button href="/" className="btn btn-secondary">        
+            Create Your Own
+            </button>
           </a>
         </div>
       </div>

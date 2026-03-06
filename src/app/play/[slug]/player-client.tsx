@@ -46,10 +46,11 @@ export function PlayerClient({ puzzle }: PlayerClientProps) {
         puzzle.id
       );
       if (valid) {
+        timer.stop();
         setSolved(true);
       }
     }
-  }, [state, solved, puzzle]);
+  }, [state, solved, puzzle, timer]);
 
   // Keyboard handler: translates KeyboardEvent into PuzzleAction dispatches
   const handleKeyDown = useCallback(

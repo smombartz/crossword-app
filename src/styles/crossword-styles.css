@@ -95,7 +95,7 @@ h4 {
    Links
    ============================================================ */
 a:link { color: #478fc5; text-decoration: none; }
-a:visited { color: #4e98d0; }
+a:visited { color: #478fc5; }
 a:hover { color: #255980; text-decoration: underline; }
 a:active { color: #255980; }
 

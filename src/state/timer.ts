@@ -12,6 +12,10 @@ export function useTimer() {
     setIsRunning(true);
   }, [isRunning]);
 
+  const stop = useCallback(() => {
+    setIsRunning(false);
+  }, []);
+
   useEffect(() => {
     if (!isRunning) return;
 
@@ -42,5 +46,5 @@ export function useTimer() {
   const seconds = elapsedSeconds % 60;
   const formatted = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
 
-  return { elapsedSeconds, formatted, start, isRunning };
+  return { elapsedSeconds, formatted, start, stop, isRunning };
 }
