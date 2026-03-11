@@ -14,8 +14,29 @@ const libreFranklin = Libre_Franklin({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXTAUTH_URL ?? 'http://localhost:3000'),
   title: 'Crossword App',
   description: 'Create and share crossword puzzles',
+  openGraph: {
+    title: 'Crossword App',
+    description: 'Create and share crossword puzzles',
+    url: '/',
+    siteName: 'Crossword App',
+    locale: 'en_US',
+    type: 'website',
+    images: [{
+      url: '/og-crossword.png',
+      width: 1200,
+      height: 630,
+      alt: 'Crossword puzzle grid',
+    }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Crossword App',
+    description: 'Create and share crossword puzzles',
+    images: [{ url: '/og-crossword.png', alt: 'Crossword puzzle grid' }],
+  },
 };
 
 export default function RootLayout({
@@ -26,6 +47,16 @@ export default function RootLayout({
   return (
     <html lang="en" className={libreFranklin.variable}>
       <head>
+        {/* Google tag (gtag.js) */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZTFF244QTT"></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-ZTFF244QTT');`,
+          }}
+        />
         <link rel="stylesheet" href="https://use.typekit.net/ubq6oda.css" />
       </head>
       <body>
