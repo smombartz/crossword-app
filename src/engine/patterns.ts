@@ -120,7 +120,7 @@ export function placeBlackPair(grid: string[][], r: number, c: number): void {
 /**
  * Fisher-Yates shuffle. Returns a new shuffled array.
  */
-function shuffle<T>(arr: readonly T[]): T[] {
+export function shuffle<T>(arr: readonly T[]): T[] {
   const result = [...arr];
   for (let i = result.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));

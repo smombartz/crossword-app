@@ -1,5 +1,6 @@
 import { BLACK } from './types';
 import type { WordList, WordEntry } from './wordlist';
+import { shuffle } from './patterns';
 
 /** Direction for a slot: horizontal (across) or vertical (down). */
 type SlotDirection = 'across' | 'down';
@@ -130,7 +131,7 @@ function getCandidates(
   maxCandidates: number,
 ): readonly WordEntry[] {
   const constraints = getConstraints(grid, slot);
-  const all = wordList.wordsMatchingPattern(slot.length, constraints);
+  const all = shuffle(wordList.wordsMatchingPattern(slot.length, constraints));
   const viable: WordEntry[] = [];
   for (let i = 0; i < all.length && viable.length < maxCandidates; i++) {
     if (!usedWords.has(all[i].word)) {
