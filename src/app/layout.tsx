@@ -14,7 +14,10 @@ const libreFranklin = Libre_Franklin({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXTAUTH_URL ?? 'https://crosswords.mombartz.com'),
+  metadataBase: new URL(
+    process.env.NEXTAUTH_URL ??
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000')
+  ),
   title: 'Crossword App',
   description: 'Create and share crossword puzzles',
   openGraph: {
